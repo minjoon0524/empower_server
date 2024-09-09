@@ -1,5 +1,7 @@
 package com.inhatc.empower.config;
 
+import com.inhatc.empower.security.handler.APILoginFailHandler;
+import com.inhatc.empower.security.handler.APILoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +35,8 @@ public class CustomSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(config->{
             config.loginPage("/login");
+            config.successHandler(new APILoginSuccessHandler());
+            config.failureHandler(new APILoginFailHandler());
         });
 
         return http.build();
