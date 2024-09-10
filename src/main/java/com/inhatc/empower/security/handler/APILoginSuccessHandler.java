@@ -2,6 +2,7 @@ package com.inhatc.empower.security.handler;
 
 import com.google.gson.Gson;
 import com.inhatc.empower.dto.MemberDTO;
+import com.inhatc.empower.util.JWTUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,8 +29,12 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         MemberDTO memberDTO=(MemberDTO)authentication.getPrincipal();
         Map<String, Object> claims=memberDTO.getClaims();
 
-        claims.put("accessToken","");
-        claims.put("refreshToken","");
+        String accessToken= JWTUtil.generateToken(claims, 10);
+        String refreshToken= JWTUtil.generateToken(claims,60*24);
+
+
+        claims.put("accessToken", accessToken);
+        claims.put("refreshToken", refreshToken);
 
         Gson gson=new Gson();
 
