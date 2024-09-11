@@ -3,6 +3,7 @@ package com.inhatc.empower.config;
 import com.inhatc.empower.security.filter.JWTCheckFilter;
 import com.inhatc.empower.security.handler.APILoginFailHandler;
 import com.inhatc.empower.security.handler.APILoginSuccessHandler;
+import com.inhatc.empower.security.handler.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +46,9 @@ public class CustomSecurityConfig {
             config.successHandler(new APILoginSuccessHandler());
             config.failureHandler(new APILoginFailHandler());
         });
-
+        http.exceptionHandling(config-> {
+            config.accessDeniedHandler(new CustomAccessDeniedHandler());
+        });
         return http.build();
     }
 

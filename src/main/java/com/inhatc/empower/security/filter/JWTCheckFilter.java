@@ -28,7 +28,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info("check url -------- "+path);
         // /login 경로의 호출은 체크하지 않음
-        if(path.startsWith("/login")){
+        if(path.startsWith("/login") ){
             return true;
         }
 
