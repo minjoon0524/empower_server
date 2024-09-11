@@ -48,6 +48,8 @@ public class MemberDTO extends User {
         this.memberCheck = memberCheck;
         this.roleNames = roleNames;
     }
+
+
     public Map<String, Object> getClaims() {
         Map<String, Object> dataMap=new HashMap<>();
         dataMap.put("eid", eid);
