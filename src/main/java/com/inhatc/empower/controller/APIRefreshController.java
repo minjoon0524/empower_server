@@ -5,6 +5,7 @@ import com.inhatc.empower.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 public class APIRefreshController {
-
+    @RequestMapping("/refresh")
     public Map<String, Object> refresh(@RequestHeader("Authorization") java.lang.String authHeader,
                                       java.lang.String refreshToken) {
         if (refreshToken == null) {
