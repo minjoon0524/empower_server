@@ -1,6 +1,7 @@
 package com.inhatc.empower.security.handler;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.inhatc.empower.dto.MemberDTO;
 import com.inhatc.empower.util.JWTUtil;
 import jakarta.servlet.ServletException;
@@ -29,6 +30,7 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         MemberDTO memberDTO=(MemberDTO)authentication.getPrincipal();
         Map<String, Object> claims=memberDTO.getClaims();
 
+
         String accessToken= JWTUtil.generateToken(claims, 10);
         String refreshToken= JWTUtil.generateToken(claims,60*24);
 
@@ -36,10 +38,11 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         claims.put("accessToken", accessToken);
         claims.put("refreshToken", refreshToken);
 
-        Gson gson=new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
 
         String jsonStr=gson.toJson(claims);
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");  // UTF-8로 인코딩 설정
         PrintWriter printWriter=response.getWriter();
         printWriter.println(jsonStr);
         printWriter.close();
