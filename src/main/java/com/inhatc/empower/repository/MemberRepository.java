@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 
 public interface MemberRepository extends JpaRepository<Member,String> {
 
@@ -18,9 +16,14 @@ public interface MemberRepository extends JpaRepository<Member,String> {
     @Query("select m from Member m where m.eid = :eid")
     Member getWithRoles(@Param("eid") String eid);
 
-    @Query("select m, r from Member m left join m.memberRoleList r")
-    Page<Object[]> getMemberList(Pageable pageable);
+    @Query("select m from Member m")
+    Page<Member> getMemberList(Pageable pageable);
 
+    Page<Member> findByNameContaining(String name, Pageable pageable);
+    Page<Member> findByDepartmentContaining(String department, Pageable pageable);
+    Page<Member> findByPositionContaining(String position, Pageable pageable);
+    Page<Member> findByEmailContaining(String email, Pageable pageable);
+    Page<Member> findByPhoneContaining(String phone, Pageable pageable);
 
 
 }
