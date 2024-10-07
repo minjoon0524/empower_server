@@ -15,6 +15,7 @@ import java.util.List;
 @ToString(exclude = "memberRoleList")
 public class Member {
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String eid; // 사번
     private String name;
     private String pw;
