@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,21 +35,71 @@ public class MemberRepositoryTest {
     @Test
     public void testInsertMember(){
         log.info("----------memberInsert Test----------");
-        for(int i =0; i<10; i++) {
+
+        for(int i =0; i==0; i++) {
+            Member member= Member.builder()
+                    .eid("ADMIN")
+                    .email("ADMIN@aaa.com")
+                    .position("ADMIN")
+                    .phone("010-1234-5678")
+                    .department("관리자")
+                    .name("관리자")
+                    .address("서울광역시")
+
+                    .pw(passwordEncoder.encode("1111"))
+                    .build();
+            member.addRole(MemberRole.ADMIN);
+            memberRepository.save(member);
+        }
+        
+        for(int i =1; i<50; i++) {
+            Member member= Member.builder()
+                    .eid("user"+i+"@aaa.com")
+                    .email("user"+i+"@aaa.com")
+                    .position("사원")
+                    .phone("010-1234-5678")
+                    .department("개발 1팀")
+                    .name("홍길동"+i)
+                    .address("인천광역시")
+                    
+                    .pw(passwordEncoder.encode("1111"))
+                    .build();
+            member.addRole(MemberRole.USER);
+            memberRepository.save(member);
+        }
+
+        for(int i =51; i<=80; i++) {
             Member member= Member.builder()
                     .eid("user"+i+"@aaa.com")
                     .email("user"+i+"@aaa.com")
                     .position("팀장")
-                    .name("유민준"+i)
+                    .phone("010-1234-5678")
+                    .department("개발 2팀")
+                    .name("홍길동"+i)
+                    .address("서울광역시")
+
                     .pw(passwordEncoder.encode("1111"))
                     .build();
-            member.addRole(MemberRole.USER);
-            if(i >=5)
-                member.addRole(MemberRole.MANAGER);
-            if(i >=8)
-                member.addRole(MemberRole.ADMIN);
+            member.addRole(MemberRole.MANAGER);
             memberRepository.save(member);
         }
+
+        for(int i =81; i<=100; i++) {
+            Member member= Member.builder()
+                    .eid("user"+i+"@aaa.com")
+                    .email("user"+i+"@aaa.com")
+                    .position("부장")
+                    .phone("010-1234-5678")
+                    .department("개발 3팀")
+                    .name("홍길동"+i)
+                    .address("서울광역시")
+
+                    .pw(passwordEncoder.encode("1111"))
+                    .build();
+            member.addRole(MemberRole.MANAGER);
+            memberRepository.save(member);
+        }
+        
 
     }
 
@@ -63,48 +114,19 @@ public class MemberRepositoryTest {
 
     }
 
+//수정 테스트
     @Test
-    public void testMemberRead() {
-        // PageRequestDTO 객체 생성
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(1) // 페이지 번호 설정
-                .size(10) // 페이지 크기 설정
-                .build();
-
-        // Pageable 객체 생성 (페이지 번호가 0부터 시작하므로 -1)
-        Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
-                pageRequestDTO.getSize(),
-                Sort.by("eid").descending());
-
-        // Member 리스트 조회
-        Page<Object[]> result = memberRepository.getMemberList(pageable);
-
-        // MemberDTO 리스트 생성
-        List<MemberSearchDTO> dtoList = result.get().map(arr -> {
-            Member member = (Member) arr[0];
-
-            // MemberDTO 변환
-            MemberSearchDTO memberSearchDTO = MemberSearchDTO.builder()
-                    .eid(member.getEid())
-                    .name(member.getName())
-                    .build();
-            return memberSearchDTO;
-        }).collect(Collectors.toList());
-
-        // 전체 회원 수
-        long totalCount = result.getTotalElements();
-
-        // PageResponseDTO 반환
-        PageResponseDTO<MemberSearchDTO> pageResponseDTO = PageResponseDTO.<MemberSearchDTO>withAll()
-                .dtoList(dtoList)
-                .totalCount(totalCount)
-                .pageRequestDTO(pageRequestDTO)
-                .build();
-
-        // 테스트 결과 출력 또는 추가 검증 로직 작성
-       log.info(pageResponseDTO);
+    public void testModify() {
+        String eid="user0@aaa.com";
+        Member member = memberRepository.getWithRoles(eid);
+        member.changeEmail("admin@aaa.com");
+        member.changeAddress("서울광역시");
+        member.changeHireDate(LocalDate.of(2024,10,7));
+        member.addRole(MemberRole.ADMIN);
+        memberRepository.save(member);
     }
 
 
-    }
+
+
+}
