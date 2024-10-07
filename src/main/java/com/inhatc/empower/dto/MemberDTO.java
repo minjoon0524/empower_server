@@ -1,8 +1,7 @@
 package com.inhatc.empower.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
+
 public class MemberDTO extends User {
     private String eid; // 사번
     private String name;
@@ -31,8 +31,8 @@ public class MemberDTO extends User {
     private List<String> roleNames = new ArrayList<>();
 
 
-    public MemberDTO(String eid, String name, String pw, String department,
-                     String email, String phone, String address, String position,
+    public MemberDTO(String eid, String email, String pw,String name,
+                     String department, String phone, String address, String position,
                      LocalDate hireDate, boolean memberCheck, List<String> roleNames) {
         super(eid,pw, roleNames.stream().map(str->
                 new SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
@@ -50,6 +50,9 @@ public class MemberDTO extends User {
     }
 
 
+    public MemberDTO() {
+        super("", "", new ArrayList<>()); // 기본 값으로 빈 문자열과 빈 리스트를 전달
+    }
     public Map<String, Object> getClaims() {
         Map<String, Object> dataMap=new HashMap<>();
         dataMap.put("eid", eid);
@@ -63,6 +66,7 @@ public class MemberDTO extends User {
         dataMap.put("hireDate", hireDate);
         dataMap.put("memberCheck", memberCheck);
         dataMap.put("roleNames", roleNames);
+        System.out.println("======== dataMap 확인"+ dataMap);
         return dataMap;
     }
 
