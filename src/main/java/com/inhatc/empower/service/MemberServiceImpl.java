@@ -2,9 +2,7 @@ package com.inhatc.empower.service;
 
 import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.domain.MemberRole;
-import com.inhatc.empower.dto.MemberSearchDTO;
-import com.inhatc.empower.dto.PageRequestDTO;
-import com.inhatc.empower.dto.PageResponseDTO;
+import com.inhatc.empower.dto.*;
 import com.inhatc.empower.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public PageResponseDTO<MemberSearchDTO> getMemberList(PageRequestDTO pageRequestDTO, String option, String term) {
@@ -84,6 +84,55 @@ public class MemberServiceImpl implements MemberService {
                 .build();
     }
 
+    @Override
+    public String register(MemberDTO memberDTO) {
+        log.info(".........");
+        Member member = dtoToEntity(memberDTO);
+
+        return memberRepository.save(member).getEid();
+    }
+
+
+    @Override
+    public MemberDTO get(String eid) {
+        Member member = memberRepository.getWithRoles(eid);
+        log.info(member);
+        // MemberDTO 객체 생성
+        MemberDTO memberDTO = new MemberDTO(
+                member.getEid(),
+                member.getEmail(),
+                member.getPw(),
+                member.getName(),
+                member.getDepartment(),
+                member.getPhone(),
+                member.getAddress(),
+                member.getPosition(),
+                member.getHireDate(),
+                member.isMemberCheck(),
+                member.getMemberRoleList().stream()
+                        .map(Enum::name) // Enum의 name() 메서드를 사용하여 역할 이름 가져오기
+                        .collect(Collectors.toList())
+        );
+
+        return memberDTO;
+    }
+
+
+    @Override
+    public void modify(MemberModifyDTO memberModifyDTO) {
+        Member member = memberRepository.getWithRoles(memberModifyDTO.getEid());
+        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
+        member.changeDepartment(memberModifyDTO.getDepartment());
+        member.changePhone(memberModifyDTO.getPhone());
+        member.changeAddress(memberModifyDTO.getAddress());
+        member.changePosition(memberModifyDTO.getPosition());
+        memberRepository.save(member);
+    }
+
+    @Override
+    public void remove(String eid) {
+        memberRepository.deleteById(eid);
+    }
 
 
 }
