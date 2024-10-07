@@ -1,10 +1,14 @@
 package com.inhatc.empower.dto;
 
+import com.inhatc.empower.domain.MemberRole;
 import lombok.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.management.relation.Role;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -26,4 +30,6 @@ public class MemberSearchDTO {
 
     @Builder.Default
     private List<String> roleNames = new ArrayList<>();
+
+
 }
