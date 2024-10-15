@@ -121,6 +121,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void modify(MemberModifyDTO memberModifyDTO) {
         Member member = memberRepository.getWithRoles(memberModifyDTO.getEid());
+        member.changeName(memberModifyDTO.getName());
+        member.changeEmail(memberModifyDTO.getEmail());
+        member.changeHireDate(memberModifyDTO.getHireDate());
         member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
         member.changeDepartment(memberModifyDTO.getDepartment());
         member.changePhone(memberModifyDTO.getPhone());
