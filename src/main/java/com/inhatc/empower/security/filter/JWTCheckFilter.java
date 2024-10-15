@@ -28,11 +28,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info("check url -------- "+path);
         // /login 경로의 호출은 체크하지 않음
-        if (path.startsWith("/login") ||
-                path.startsWith("/swagger-ui") ||
-                path.startsWith("/v3/api-docs")  ){
+        if(path.startsWith("/login") ){
             return true;
         }
+
 
         //false==check
         return super.shouldNotFilter(request);
@@ -50,17 +49,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         log.info("------------------JWTCheckFilter.................");
         String authHeaderStr = request.getHeader("Authorization");
 
-        if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return; // JWT가 없으면 다음 필터로 진행
-        }
-
-
-
         try {
             // Bearer accestoken...
             String accessToken = authHeaderStr.substring(7);
-            log.info("Extracted access token: {}", accessToken);
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
             log.info("JWT claims: " + claims);
 
