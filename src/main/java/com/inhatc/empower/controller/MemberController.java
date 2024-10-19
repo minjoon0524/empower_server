@@ -41,9 +41,9 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody MemberDTO memberDTO) {
-        log.info("MemberDTO: " + memberDTO);
-        String eid = memberService.register(memberDTO);
+    public Map<String, String> register(@RequestBody MemberAddDTO memberAddDTO) {
+        log.info("MemberDTO: " + memberAddDTO);
+        String eid = memberService.register(memberAddDTO);
         return Map.of("EID", eid);
     }
 

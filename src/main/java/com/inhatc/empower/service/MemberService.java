@@ -12,7 +12,7 @@ public interface MemberService {
 
 
     //    등록
-    String register(MemberDTO memberDTO);
+    String register(MemberAddDTO memberAddDTO);
     //    조회
     MemberDTO get(String eid);
     //    수정

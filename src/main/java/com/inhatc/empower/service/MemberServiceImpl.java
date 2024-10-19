@@ -85,17 +85,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String register(MemberDTO memberDTO) {
+    public String register(MemberAddDTO memberAddDTO) {
         // 회원 추가를 위한 member 객체 생성
         Member member = Member.builder()
-                .eid(memberDTO.getEid())
-                .email(memberDTO.getEmail())
-                .position(memberDTO.getPosition())
-                .phone(memberDTO.getPhone())
-                .department(memberDTO.getDepartment())
-                .name(memberDTO.getName())
-                .address(memberDTO.getAddress())
-                .pw(passwordEncoder.encode(memberDTO.getPassword()))
+                .eid(memberAddDTO.getEid())
+                .email(memberAddDTO.getEmail())
+                .position(memberAddDTO.getPosition())
+                .phone(memberAddDTO.getPhone())
+                .department(memberAddDTO.getDepartment())
+                .name(memberAddDTO.getName())
+                .address(memberAddDTO.getAddress())
+                .pw(passwordEncoder.encode(memberAddDTO.getPw()))
                 .build();
         // 회원 추가시 기본 권한 설정
         member.addRole(MemberRole.USER);
