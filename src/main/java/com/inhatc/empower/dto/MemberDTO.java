@@ -1,5 +1,6 @@
 package com.inhatc.empower.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +26,7 @@ public class MemberDTO extends User {
     private String phone;
     private String address;
     private String position;//직급
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate hireDate; //입사일
     private boolean memberCheck; // 가입 여부
 

@@ -1,5 +1,6 @@
 package com.inhatc.empower.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -33,24 +33,26 @@ public class MemberRepositoryTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
+    public void testOneInsertMember(){
+        log.info("----------testOneInsertMember Test----------");
+        Member member = Member.builder()
+                .eid("ADMIN")
+                .department("관리팀")
+                .position("관리자")
+                .name("관리자")
+                .pw(passwordEncoder.encode("1111"))
+
+                .build();
+
+
+        memberRepository.save(member);
+    }
+
+    @Test
     public void testInsertMember(){
         log.info("----------memberInsert Test----------");
 
-        for(int i =0; i==0; i++) {
-            Member member= Member.builder()
-                    .eid("ADMIN")
-                    .email("ADMIN@aaa.com")
-                    .position("ADMIN")
-                    .phone("010-1234-5678")
-                    .department("관리자")
-                    .name("관리자")
-                    .address("서울광역시")
 
-                    .pw(passwordEncoder.encode("1111"))
-                    .build();
-            member.addRole(MemberRole.ADMIN);
-            memberRepository.save(member);
-        }
         
         for(int i =1; i<50; i++) {
             Member member= Member.builder()
@@ -58,7 +60,7 @@ public class MemberRepositoryTest {
                     .email("user"+i+"@aaa.com")
                     .position("사원")
                     .phone("010-1234-5678")
-                    .department("개발 1팀")
+                    .department("개발팀")
                     .name("홍길동"+i)
                     .address("인천광역시")
                     
@@ -90,7 +92,7 @@ public class MemberRepositoryTest {
                     .email("user"+i+"@aaa.com")
                     .position("부장")
                     .phone("010-1234-5678")
-                    .department("개발 3팀")
+                    .department("개발팀")
                     .name("홍길동"+i)
                     .address("서울광역시")
 
