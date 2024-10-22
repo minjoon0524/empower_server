@@ -3,6 +3,7 @@ package com.inhatc.empower.service;
 import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.dto.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ public interface MemberService {
     //    조회
     MemberDTO get(String eid);
     //    수정
-    void modify(MemberModifyDTO memberModifyDTO);
+    void modify(MemberModifyDTO memberModifyDTO, MultipartFile profileName);
     //    삭제
     void remove(String eid);
 

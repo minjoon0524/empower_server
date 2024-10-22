@@ -4,6 +4,7 @@ import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.domain.MemberRole;
 import com.inhatc.empower.dto.*;
 import com.inhatc.empower.repository.MemberRepository;
+import com.inhatc.empower.util.CustomFileUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomFileUtil customFileUtil; // CustomFileUtil 주입
 
     @Override
     public PageResponseDTO<MemberSearchDTO> getMemberList(PageRequestDTO pageRequestDTO, String option, String term) {
@@ -97,13 +100,12 @@ public class MemberServiceImpl implements MemberService {
                 .address(memberAddDTO.getAddress())
                 .pw(passwordEncoder.encode(memberAddDTO.getPw()))
                 .build();
-        // 회원 추가시 기본 권한 설정
+        // 회원 추가 시 기본 권한 설정
         member.addRole(MemberRole.USER);
         // 회원 저장 후 사원 번호 가져오기
         memberRepository.save(member).getEid();
         return memberRepository.save(member).getEid();
     }
-
 
     @Override
     public MemberDTO get(String eid) {
@@ -129,10 +131,16 @@ public class MemberServiceImpl implements MemberService {
         return memberDTO;
     }
 
-
     @Override
-    public void modify(MemberModifyDTO memberModifyDTO) {
+    public void modify(MemberModifyDTO memberModifyDTO, MultipartFile profileName) {
         Member member = memberRepository.getWithRoles(memberModifyDTO.getEid());
+
+        // 프로필 사진 업로드
+        if (profileName != null && !profileName.isEmpty()) {
+            String savedProfilePictureName = customFileUtil.saveProfilePicture(profileName);
+            member.setProfileName(savedProfilePictureName); // 엔티티에 프로필 사진 이름 설정
+        }
+
         member.changeName(memberModifyDTO.getName());
         member.changeEmail(memberModifyDTO.getEmail());
         member.changeHireDate(memberModifyDTO.getHireDate());
@@ -148,6 +156,4 @@ public class MemberServiceImpl implements MemberService {
     public void remove(String eid) {
         memberRepository.deleteById(eid);
     }
-
-
 }
