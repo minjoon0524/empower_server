@@ -27,6 +27,11 @@ public class Member {
     private String position;//직급
     private LocalDate hireDate; //입사일
     private boolean memberCheck; // 가입 여부
+    private String profileName;
+
+    public void setProfileName(String profileName) {
+        this.profileName = profileName;
+    }
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default

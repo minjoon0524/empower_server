@@ -29,7 +29,7 @@ public class MemberDTO extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate hireDate; //입사일
     private boolean memberCheck; // 가입 여부
-
+    private String profileName;
     private List<String> roleNames = new ArrayList<>();
 
 
@@ -49,6 +49,7 @@ public class MemberDTO extends User {
         this.hireDate = hireDate;
         this.memberCheck = memberCheck;
         this.roleNames = roleNames;
+
     }
 
 
@@ -68,6 +69,7 @@ public class MemberDTO extends User {
         dataMap.put("hireDate", hireDate);
         dataMap.put("memberCheck", memberCheck);
         dataMap.put("roleNames", roleNames);
+
         System.out.println("======== dataMap 확인"+ dataMap);
         return dataMap;
     }
