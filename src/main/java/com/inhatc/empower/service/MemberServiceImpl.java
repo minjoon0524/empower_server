@@ -8,10 +8,12 @@ import com.inhatc.empower.util.CustomFileUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -107,26 +109,65 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(member).getEid();
     }
 
-    @Override
-    public MemberDTO get(String eid) {
+//    @Override
+//    public MemberDTO get(String eid) {
+//        Member member = memberRepository.getWithRoles(eid);
+//        log.info(member);
+//        // MemberDTO 객체 생성
+//        MemberDTO memberDTO = new MemberDTO(
+//                member.getEid(),
+//                member.getEmail(),
+//                member.getPw(),
+//                member.getName(),
+//                member.getDepartment(),
+//                member.getPhone(),
+//                member.getAddress(),
+//                member.getPosition(),
+//                member.getHireDate(),
+//                member.isMemberCheck(),
+//                member.getMemberRoleList().stream()
+//                        .map(Enum::name) // Enum의 name() 메서드를 사용하여 역할 이름 가져오기
+//                        .collect(Collectors.toList())
+//        );
+//
+//        return memberDTO;
+//    }
+
+    public MemberProfileDTO get(String eid) {
         Member member = memberRepository.getWithRoles(eid);
+        String profileName = member.getProfileName();
+        String profileImagePath = null;
+
+        // 프로필 이미지 파일 경로 설정
+        if (profileName != null && !profileName.isEmpty()) {
+            // getFile 메소드를 활용하여 파일을 확인 및 처리
+            ResponseEntity<Resource> response = customFileUtil.getFile(profileName);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                profileImagePath = profileName;  // 파일이 존재할 경우 해당 파일명 사용
+            } else {
+                profileImagePath = "default.jpeg";  // 파일이 없을 경우 기본 이미지 사용
+            }
+        } else {
+            profileImagePath = "default.jpeg";  // 프로필 이미지가 없을 경우 기본 이미지 사용
+        }
         log.info(member);
         // MemberDTO 객체 생성
-        MemberDTO memberDTO = new MemberDTO(
-                member.getEid(),
-                member.getEmail(),
-                member.getPw(),
-                member.getName(),
-                member.getDepartment(),
-                member.getPhone(),
-                member.getAddress(),
-                member.getPosition(),
-                member.getHireDate(),
-                member.isMemberCheck(),
-                member.getMemberRoleList().stream()
-                        .map(Enum::name) // Enum의 name() 메서드를 사용하여 역할 이름 가져오기
-                        .collect(Collectors.toList())
-        );
+        MemberProfileDTO memberDTO = MemberProfileDTO.builder()
+                .eid(member.getEid())
+                .name(member.getName())
+                .pw(member.getPw())
+                .department(member.getDepartment())
+                .email(member.getEmail())
+                .phone(member.getPhone())
+                .address(member.getAddress())
+                .position(member.getPosition())
+                .hireDate(member.getHireDate())
+                .memberCheck(member.isMemberCheck())
+                .profileImagePath(profileImagePath) // 프로필 이미지 경로 설정
+                .roleNames(member.getMemberRoleList().stream()
+                        .map(Enum::name)
+                        .collect(Collectors.toList()))
+                .build();
 
         return memberDTO;
     }

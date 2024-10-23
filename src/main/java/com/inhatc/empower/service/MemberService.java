@@ -15,7 +15,7 @@ public interface MemberService {
     //    등록
     String register(MemberAddDTO memberAddDTO);
     //    조회
-    MemberDTO get(String eid);
+    MemberProfileDTO get(String eid);
     //    수정
     void modify(MemberModifyDTO memberModifyDTO, MultipartFile profileName);
     //    삭제
