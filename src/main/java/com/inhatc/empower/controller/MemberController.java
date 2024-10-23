@@ -5,6 +5,8 @@ import com.inhatc.empower.service.MemberService;
 import com.inhatc.empower.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,9 +56,14 @@ public class MemberController {
 
 
     @GetMapping("/{eid}")
-    public MemberDTO get(@PathVariable(name="eid") String eid) {
+    public MemberProfileDTO get(@PathVariable(name="eid") String eid) {
         log.info("Fetching member with eid: {}", eid);
         return memberService.get(eid);
+    }
+
+    @GetMapping("/profile/{fileName}")
+    public ResponseEntity<Resource> getProfileImage(@PathVariable("fileName") String fileName) {
+        return customFileUtil.getFile(fileName);
     }
 
     @PostMapping("/register")
@@ -65,17 +72,6 @@ public class MemberController {
         String eid = memberService.register(memberAddDTO);
         return Map.of("EID", eid);
     }
-
-//    @PutMapping("/{eid}")
-//    public Map<String, String> modify(
-//            @PathVariable(name="eid") String eid,
-//            @RequestBody MemberModifyDTO memberModifyDTO) {
-//        memberModifyDTO.setEid(eid);
-//        log.info("Modify: " + memberModifyDTO);
-//        memberService.modify(memberModifyDTO);
-//        return Map.of("RESULT", "SUCCESS");
-//    }
-
     @DeleteMapping("/{eid}")
     public Map<String, String> remove(@PathVariable(name="eid") String eid) {
         log.info("Remove: " + eid);
