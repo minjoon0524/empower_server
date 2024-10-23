@@ -75,6 +75,7 @@ public class CustomFileUtil {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+        log.info(ResponseEntity.ok().headers(headers).body(resource));
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
