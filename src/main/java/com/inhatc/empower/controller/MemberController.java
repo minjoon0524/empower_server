@@ -31,7 +31,7 @@ public class MemberController {
         log.info("list..........." + pageRequestDTO);
         return memberService.getMemberList(pageRequestDTO, option, term);
     }
-//    @PutMapping("/modify")
+    //    @PutMapping("/modify")
 //    public Map<String,String> modify(@RequestBody MemberModifyDTO memberModifyDTO){
 //        log.info("member modify: " + memberModifyDTO);
 //

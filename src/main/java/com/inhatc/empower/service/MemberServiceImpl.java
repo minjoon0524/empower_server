@@ -1,7 +1,7 @@
 package com.inhatc.empower.service;
 
 import com.inhatc.empower.domain.Member;
-import com.inhatc.empower.domain.MemberRole;
+import com.inhatc.empower.constant.MemberRole;
 import com.inhatc.empower.dto.*;
 import com.inhatc.empower.repository.MemberRepository;
 import com.inhatc.empower.util.CustomFileUtil;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -145,10 +144,10 @@ public class MemberServiceImpl implements MemberService {
             if (response.getStatusCode().is2xxSuccessful()) {
                 profileImagePath = profileName;  // 파일이 존재할 경우 해당 파일명 사용
             } else {
-                profileImagePath = "default.jpeg";  // 파일이 없을 경우 기본 이미지 사용
+                profileImagePath = "default.png";  // 파일이 없을 경우 기본 이미지 사용
             }
         } else {
-            profileImagePath = "default.jpeg";  // 프로필 이미지가 없을 경우 기본 이미지 사용
+            profileImagePath = "default.png";  // 프로필 이미지가 없을 경우 기본 이미지 사용
         }
         log.info(member);
         // MemberDTO 객체 생성

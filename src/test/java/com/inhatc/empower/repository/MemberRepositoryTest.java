@@ -2,26 +2,14 @@ package com.inhatc.empower.repository;
 
 
 import com.inhatc.empower.domain.Member;
-import com.inhatc.empower.domain.MemberRole;
-import com.inhatc.empower.dto.MemberDTO;
-import com.inhatc.empower.dto.MemberSearchDTO;
-import com.inhatc.empower.dto.PageRequestDTO;
-import com.inhatc.empower.dto.PageResponseDTO;
+import com.inhatc.empower.constant.MemberRole;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @Log4j2

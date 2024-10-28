@@ -1,15 +1,13 @@
 package com.inhatc.empower.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.inhatc.empower.domain.MemberRole;
+import com.inhatc.empower.constant.MemberAttendanceStatus;
 import lombok.*;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import javax.management.relation.Role;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

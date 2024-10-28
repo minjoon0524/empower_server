@@ -1,6 +1,7 @@
 package com.inhatc.empower.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.inhatc.empower.common.entity.BaseEntity;
+import com.inhatc.empower.constant.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,9 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @ToString(exclude = "memberRoleList")
-public class Member {
+public class Member extends BaseEntity {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String eid; // 사번
     private String name;
     private String pw;
