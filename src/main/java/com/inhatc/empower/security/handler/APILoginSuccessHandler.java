@@ -28,6 +28,7 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("-------------------------------------");
 
         MemberDTO memberDTO=(MemberDTO)authentication.getPrincipal();
+        log.info(memberDTO);
         Map<String, Object> claims=memberDTO.getClaims();
 
 

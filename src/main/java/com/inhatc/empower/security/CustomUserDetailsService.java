@@ -40,6 +40,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 member.getPosition(),       // 직급
                 member.getHireDate(),       // 입사일
                 member.isMemberCheck(),     // 가입 여부
+
                 member.getMemberRoleList().stream()
                         .map(Enum::name).collect(Collectors.toList())
         );
