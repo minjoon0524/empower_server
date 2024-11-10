@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,6 +144,20 @@ public class MemberVacationRepositoryTest {
         log.info("----------testDeleteVacation Test----------");
         Long vacId = 1L;
         memberVacationRepository.deleteById(vacId);
+    }
+
+    @Test
+    @DisplayName("휴가 리스트 테스트")
+    public void testListVacation(){
+        log.info("----------testListVacation Test----------");
+
+        Pageable pageable = PageRequest.of(0,10, Sort.by("vacId").descending());
+
+        Page<MemberVacation> result = memberVacationRepository.findAll(pageable);
+
+        log.info(result.getTotalElements());
+
+        result.getContent().stream().forEach(todo -> log.info(todo));
     }
 
 
