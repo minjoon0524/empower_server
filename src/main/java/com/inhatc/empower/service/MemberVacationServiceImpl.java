@@ -4,10 +4,7 @@ import com.inhatc.empower.constant.MemberVacationStatus;
 import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.domain.MemberAttendance;
 import com.inhatc.empower.domain.MemberVacation;
-import com.inhatc.empower.dto.MemberAttendanceDTO;
-import com.inhatc.empower.dto.MemberVacationDTO;
-import com.inhatc.empower.dto.PageRequestDTO;
-import com.inhatc.empower.dto.PageResponseDTO;
+import com.inhatc.empower.dto.*;
 import com.inhatc.empower.repository.MemberRepository;
 import com.inhatc.empower.repository.MemberVacationRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,33 +42,25 @@ public class MemberVacationServiceImpl implements MemberVacationService {
     }
 
 
-//    @Override
-//    public List<Member> getMemberVacationsList(String memberId) {
-//        if(memberId == null) {
-//            Member member = memberRepository.findWithVacationListByEid(memberId);
-//            return List.of(member);
-//
-//        }
-//
-//        return List.of();
-//    }
-
+    @Transactional(readOnly = true)
     @Override
-    public PageResponseDTO<MemberVacationDTO> getMemberVacationsList(PageRequestDTO pageRequestDTO, String eid) {
-        // Pageable 객체 생성
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1
-                , pageRequestDTO.getSize()
-                , Sort.by("reg_time").descending());
+    public PageResponseDTO<MemberVacationDTO> getAllVacationList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("regTime").descending()
+        );
 
+        // @EntityGraph를 사용하는 메서드로 변경
+        Page<MemberVacation> vacationPage = memberVacationRepository.findAll(pageable);
 
-        // 회원 정보와 해당 회원의 모든 휴가 신청 내역을 페이징 처리하여 조회
-        Page<MemberVacation> vacationPage = memberVacationRepository.findByMemberEid(eid, pageable);
-
-        // MemberVacation 엔티티를 MemberVacationDTO로 변환
         List<MemberVacationDTO> dtoList = vacationPage.getContent().stream()
                 .map(vacation -> MemberVacationDTO.builder()
-                        .eid(vacation.getMember().getEid())
                         .vacId(vacation.getVacId())
+                        .eid(vacation.getMember().getEid())
+                        .memberName(vacation.getMember().getName())
+                        .department(vacation.getMember().getDepartment())
+                        .position(vacation.getMember().getPosition())
                         .vacType(vacation.getVacType())
                         .vacStatus(vacation.getVacStatus())
                         .vacStartDate(vacation.getVacStartDate())
@@ -79,24 +69,28 @@ public class MemberVacationServiceImpl implements MemberVacationService {
                         .build())
                 .collect(Collectors.toList());
 
-        // 전체 휴가 신청 내역 수
-        long totalCount = vacationPage.getTotalElements();
-
-        // PageResponseDTO 반환
         return PageResponseDTO.<MemberVacationDTO>withAll()
                 .dtoList(dtoList)
-                .totalCount(totalCount)
+                .totalCount(vacationPage.getTotalElements())
                 .pageRequestDTO(pageRequestDTO)
                 .build();
-
     }
 
     @Override
     public MemberVacationDTO detailsVacation(Long vacId) {
+        MemberVacationDTO memberVacationDTO=new MemberVacationDTO();
+
         // 휴가 조회
         MemberVacation memberVacation = memberVacationRepository.findById(vacId).orElseThrow();
 
-        return  modelMapper.map(memberVacation, MemberVacationDTO.class);
+        memberVacationDTO.setEid(memberVacation.getMember().getEid());
+        memberVacationDTO.setMemberName(memberVacation.getMember().getName());
+        memberVacationDTO.setDepartment(memberVacation.getMember().getDepartment());
+        memberVacationDTO.setPosition(memberVacation.getMember().getPosition());
+
+        modelMapper.map(memberVacation, memberVacationDTO);
+
+        return memberVacationDTO;
     }
 
 
@@ -120,11 +114,74 @@ public class MemberVacationServiceImpl implements MemberVacationService {
 
     @Override
     public void deleteVacation(Long vacId) {
-
+        memberVacationRepository.deleteById(vacId);
     }
 
     @Override
-    public void approveVacation(Long vacId, MemberVacationStatus status) {
+    public String approveVacation(MemberVacationAttendanceDTO memberVacationAttendanceDTO) {
+        // 휴가 조회        
+        MemberVacation memberVacation = memberVacationRepository.findById(memberVacationAttendanceDTO.getVacId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 휴가를 찾을 수 없습니다."));
 
+        // 승인 상태 변경
+        memberVacation.changeVacStatus(memberVacationAttendanceDTO.getVacStatus());
+
+        String result;
+
+        // 승인, 거절 상태에 따른 처리
+        if (memberVacationAttendanceDTO.getVacStatus().equals(MemberVacationStatus.APPROVE)) {
+            // 승인 처리
+            result = "승인 처리 완료";
+        } else if (memberVacationAttendanceDTO.getVacStatus().equals(MemberVacationStatus.REJECT)) {
+            // 거절 처리
+            result = "거절 처리 완료";
+        } else {
+            // 다른 상태 (예: 대기)
+            result = "상태 변경 완료";
+        }
+
+        // DB 저장
+        memberVacationRepository.save(memberVacation);
+
+        return result;
     }
+
+
+    @Override
+    public PageResponseDTO<MemberVacationDTO> getOneVacationList(PageRequestDTO pageRequestDTO, String eid) {
+        // Pageable 객체 생성 (PageRequestDTO에서 페이지와 사이즈 정보 활용)
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("regTime").descending()
+        );
+
+        // 특정 eid를 가진 MemberVacation을 페이징 조회
+        Page<MemberVacation> vacationPage = memberVacationRepository.findByMemberEid(pageable, eid);
+
+        // 조회된 MemberVacation 목록을 DTO로 변환
+        List<MemberVacationDTO> dtoList = vacationPage.getContent().stream()
+                .map(vacation -> MemberVacationDTO.builder()
+                        .vacId(vacation.getVacId())
+                        .eid(vacation.getMember().getEid())
+                        .memberName(vacation.getMember().getName())
+                        .department(vacation.getMember().getDepartment())
+                        .position(vacation.getMember().getPosition())
+                        .vacType(vacation.getVacType())
+                        .vacStatus(vacation.getVacStatus())
+                        .vacStartDate(vacation.getVacStartDate())
+                        .vacEndDate(vacation.getVacEndDate())
+                        .vacDescription(vacation.getVacDescription())
+                        .build())
+                .collect(Collectors.toList());
+
+        // PageResponseDTO를 생성하여 반환
+        return PageResponseDTO.<MemberVacationDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(vacationPage.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+
 }

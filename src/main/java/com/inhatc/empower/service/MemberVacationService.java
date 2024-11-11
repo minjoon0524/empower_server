@@ -1,19 +1,14 @@
 package com.inhatc.empower.service;
 
 import com.inhatc.empower.constant.MemberVacationStatus;
-import com.inhatc.empower.domain.Member;
-import com.inhatc.empower.domain.MemberVacation;
-import com.inhatc.empower.dto.MemberAttendanceDTO;
+import com.inhatc.empower.dto.MemberVacationAttendanceDTO;
 import com.inhatc.empower.dto.MemberVacationDTO;
 import com.inhatc.empower.dto.PageRequestDTO;
 import com.inhatc.empower.dto.PageResponseDTO;
 
-import java.util.List;
-
 public interface MemberVacationService {
-    // 1. 휴가 리스트 조회 (특정 회원의 휴가 목록을 조회할 경우 memberId 파라미터 추가)
-    //List<Member> getMemberVacationsList(String memberId);
-    PageResponseDTO<MemberVacationDTO> getMemberVacationsList(PageRequestDTO pageRequestDTO, String eid);
+    // 1. 전체 휴가 리스트 조회
+    PageResponseDTO<MemberVacationDTO> getAllVacationList(PageRequestDTO pageRequestDTO);
 
     // 2. 휴가 상세정보 조회 (vacId 기준으로 특정 휴가 조회)
     MemberVacationDTO detailsVacation(Long vacId);
@@ -28,7 +23,11 @@ public interface MemberVacationService {
     void deleteVacation(Long vacId);
 
     // 6. 휴가 승인 (승인할 휴가 ID와 상태를 지정)
-    void approveVacation(Long vacId, MemberVacationStatus status);
+    String approveVacation(MemberVacationAttendanceDTO memberVacationAttendanceDTO);
+
+    // 7. 로그인한 사용자 휴가리스트 조회
+    // 클라이언트는 "eid" 를 보내준다.
+    PageResponseDTO<MemberVacationDTO> getOneVacationList(PageRequestDTO pageRequestDTO,String eid);
 
 
 }
