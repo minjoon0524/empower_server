@@ -16,6 +16,9 @@ public class MemberVacationDTO {
 
     private Long vacId; // 휴가 번호
     private String eid; // 사원 ID
+    private String memberName;        // 추가
+    private String department;        // 추가
+    private String position;          // 추가
     private LeaveType vacType; // 휴가 유형
     private MemberVacationStatus vacStatus; // 승인 상태
     private LocalDate vacStartDate; // 시작일
