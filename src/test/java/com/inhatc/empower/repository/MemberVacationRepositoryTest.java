@@ -5,6 +5,8 @@ import com.inhatc.empower.constant.MemberVacationStatus;
 import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.domain.MemberVacation;
 import com.inhatc.empower.dto.MemberVacationDTO;
+import com.inhatc.empower.dto.PageRequestDTO;
+import com.inhatc.empower.dto.PageResponseDTO;
 import com.inhatc.empower.service.MemberVacationService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
@@ -146,18 +148,122 @@ public class MemberVacationRepositoryTest {
         memberVacationRepository.deleteById(vacId);
     }
 
+
     @Test
-    @DisplayName("휴가 리스트 테스트")
-    public void testListVacation(){
-        log.info("----------testListVacation Test----------");
+    @Transactional
+    @DisplayName("전체 휴가 리스트 조회 테스트")
+    public void testGetAllVacationList(){
+        log.info("----------testGetAllVacationList Test----------");
 
-        Pageable pageable = PageRequest.of(0,10, Sort.by("vacId").descending());
+        //given
+        Member member1 = Member.builder()
+                .eid("2024999")
+                .email("2024999@aaa.com")
+                .address("인천광역시")
+                .department("개발팀")
+                .position("사원")
+                .name("테스트사원1")
+                .pw(passwordEncoder.encode("1111"))
+                .build();
 
-        Page<MemberVacation> result = memberVacationRepository.findAll(pageable);
+        Member member2 = Member.builder()
+                .eid("2024888")
+                .email("2024888@aaa.com")
+                .address("서울특별시")
+                .department("인사팀")
+                .position("대리")
+                .name("테스트사원2")
+                .pw(passwordEncoder.encode("1111"))
+                .build();
 
-        log.info(result.getTotalElements());
+        memberRepository.save(member1);
+        memberRepository.save(member2);
 
-        result.getContent().stream().forEach(todo -> log.info(todo));
+        // 테스트용 휴가 데이터 생성
+        MemberVacation vacation1 = MemberVacation.builder()
+                .member(member1)
+                .vacStartDate(LocalDate.of(2024, 11, 5))
+                .vacEndDate(LocalDate.of(2024, 11, 6))
+                .vacDescription("연차휴가")
+                .vacType(LeaveType.GENERAL)
+                .vacStatus(MemberVacationStatus.PENDING)
+                .build();
+
+        MemberVacation vacation2 = MemberVacation.builder()
+                .member(member2)
+                .vacStartDate(LocalDate.of(2024, 12, 5))
+                .vacEndDate(LocalDate.of(2024, 12, 6))
+                .vacDescription("병가")
+                .vacType(LeaveType.SICK_LEAVE)
+                .vacStatus(MemberVacationStatus.PENDING)
+                .build();
+
+        memberVacationRepository.save(vacation1);
+        memberVacationRepository.save(vacation2);
+
+        // when
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResponseDTO<MemberVacationDTO> response = memberVacationService.getAllVacationList(pageRequestDTO);
+
+        // then
+        log.info("Total Count: " + response.getTotalCount());
+
+        response.getDtoList().forEach(dto -> {
+            log.info("======================");
+            log.info("Vacation ID: " + dto.getVacId());
+            log.info("Member EID: " + dto.getEid());
+            log.info("Member Name: " + dto.getMemberName());
+            log.info("Department: " + dto.getDepartment());
+            log.info("Position: " + dto.getPosition());
+            log.info("Vacation Type: " + dto.getVacType());
+            log.info("Vacation Status: " + dto.getVacStatus());
+            log.info("Vacation Period: " + dto.getVacStartDate() + " ~ " + dto.getVacEndDate());
+            log.info("Description: " + dto.getVacDescription());
+        });
+    }
+    @Test
+    @Transactional
+    @DisplayName("특정 회원 휴가 리스트 조회 테스트")
+    public void testGetOneVacationList(){
+        log.info("----------testGetOneVacationList Test----------");
+
+        String eid="2024999";
+                PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResponseDTO<MemberVacationDTO> oneVacationList = memberVacationService.getOneVacationList(pageRequestDTO, eid);
+        log.info("oneVacationList: " + oneVacationList);
+
+//        // when
+//        String eid = "2024999";
+//        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+//                .page(1)
+//                .size(10)
+//                .build();
+//
+//        PageResponseDTO<MemberVacationDTO> response = memberVacationService.getOneVacationList(pageRequestDTO,eid);
+//
+//        // then
+//        log.info("Total Count: " + response.getTotalCount());
+//
+//        response.getDtoList().forEach(dto -> {
+//            log.info("======================");
+//            log.info("Vacation ID: " + dto.getVacId());
+//            log.info("Member EID: " + dto.getEid());
+//            log.info("Member Name: " + dto.getMemberName());
+//            log.info("Department: " + dto.getDepartment());
+//            log.info("Position: " + dto.getPosition());
+//            log.info("Vacation Type: " + dto.getVacType());
+//            log.info("Vacation Status: " + dto.getVacStatus());
+//            log.info("Vacation Period: " + dto.getVacStartDate() + " ~ " + dto.getVacEndDate());
+//            log.info("Description: " + dto.getVacDescription());
+//        });
     }
 
 
