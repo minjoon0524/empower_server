@@ -16,6 +16,10 @@ public interface MemberRepository extends JpaRepository<Member,String> {
     @Query("select m from Member m where m.eid = :eid")
     Member getWithRoles(@Param("eid") String eid);
 
+    @EntityGraph(attributePaths = "vacationList")
+    @Query("select m from Member m where m.eid = :eid")
+    Page<Member> findWithVacationListByEid(Pageable pageable,@Param("eid") String eid);
+
     @Query("select m from Member m")
     Page<Member> getMemberList(Pageable pageable);
 

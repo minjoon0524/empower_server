@@ -1,5 +1,6 @@
 package com.inhatc.empower.config;
 
+import com.inhatc.empower.interceptor.IpAccessInterceptor;
 import com.inhatc.empower.security.filter.JWTCheckFilter;
 import com.inhatc.empower.security.handler.APILoginFailHandler;
 import com.inhatc.empower.security.handler.APILoginSuccessHandler;
@@ -20,13 +21,17 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 import java.util.Arrays;
 
 @Configuration
 @Log4j2
-@RequiredArgsConstructor
+
 @EnableMethodSecurity
 public class CustomSecurityConfig {
+
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("----------------security config-------------------");
@@ -36,8 +41,6 @@ public class CustomSecurityConfig {
                     httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.NEVER);
                 }
 
-
-
         );
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
@@ -46,9 +49,12 @@ public class CustomSecurityConfig {
             config.successHandler(new APILoginSuccessHandler());
             config.failureHandler(new APILoginFailHandler());
         });
+
         http.exceptionHandling(config-> {
             config.accessDeniedHandler(new CustomAccessDeniedHandler());
         });
+
+
 
 
         return http.build();

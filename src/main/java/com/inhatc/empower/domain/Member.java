@@ -29,6 +29,12 @@ public class Member extends BaseEntity {
     private boolean memberCheck; // 가입 여부
     private String profileName;
 
+
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberVacation> vacationList = new ArrayList<>();
+
+
     public void setProfileName(String profileName) {
         this.profileName = profileName;
     }

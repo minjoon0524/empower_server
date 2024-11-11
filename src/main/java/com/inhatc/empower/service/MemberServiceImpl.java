@@ -108,29 +108,6 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(member).getEid();
     }
 
-//    @Override
-//    public MemberDTO get(String eid) {
-//        Member member = memberRepository.getWithRoles(eid);
-//        log.info(member);
-//        // MemberDTO 객체 생성
-//        MemberDTO memberDTO = new MemberDTO(
-//                member.getEid(),
-//                member.getEmail(),
-//                member.getPw(),
-//                member.getName(),
-//                member.getDepartment(),
-//                member.getPhone(),
-//                member.getAddress(),
-//                member.getPosition(),
-//                member.getHireDate(),
-//                member.isMemberCheck(),
-//                member.getMemberRoleList().stream()
-//                        .map(Enum::name) // Enum의 name() 메서드를 사용하여 역할 이름 가져오기
-//                        .collect(Collectors.toList())
-//        );
-//
-//        return memberDTO;
-//    }
 
     public MemberProfileDTO get(String eid) {
         Member member = memberRepository.getWithRoles(eid);

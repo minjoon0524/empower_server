@@ -21,6 +21,7 @@ public class MemberController {
     private final MemberService memberService;
     private final CustomFileUtil customFileUtil;
 
+
     // 사용자 조회를 위한 기능
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //임시로 권한 설정
     @GetMapping("/list")
@@ -31,14 +32,7 @@ public class MemberController {
         log.info("list..........." + pageRequestDTO);
         return memberService.getMemberList(pageRequestDTO, option, term);
     }
-    //    @PutMapping("/modify")
-//    public Map<String,String> modify(@RequestBody MemberModifyDTO memberModifyDTO){
-//        log.info("member modify: " + memberModifyDTO);
-//
-//        memberService.modify(memberModifyDTO);
-//
-//        return Map.of("result","modified");
-//    }
+
 
     @PutMapping("/modify/{eid}")
     public Map<String, String> modify(

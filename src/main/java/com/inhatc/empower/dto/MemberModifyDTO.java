@@ -1,11 +1,15 @@
 package com.inhatc.empower.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@Builder
 public class MemberModifyDTO {
     private String eid; // 사번
     private String name;
@@ -19,6 +23,7 @@ public class MemberModifyDTO {
     private LocalDate hireDate; //입사일
     private boolean memberCheck; // 가입 여부
     private String profileName; // 프로필 사진 파일 이름 추가
-
+    @Builder.Default
+    private List<String> roleNames = new ArrayList<>();
 
 }
