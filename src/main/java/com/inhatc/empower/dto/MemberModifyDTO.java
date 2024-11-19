@@ -23,7 +23,6 @@ public class MemberModifyDTO {
     private String address;
     private String position;//직급
     private LocalDate hireDate; //입사일
-    private boolean memberCheck; // 가입 여부
     private String profileName; // 프로필 사진 파일 이름 추가
 
 

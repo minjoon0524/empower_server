@@ -8,6 +8,7 @@ import com.inhatc.empower.util.CustomFileUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomFileUtil customFileUtil; // CustomFileUtil 주입
-
+    private final ModelMapper modelMapper;
     @Override
     public PageResponseDTO<MemberSearchDTO> getMemberList(PageRequestDTO pageRequestDTO, String option, String term) {
         // Pageable 객체 생성
@@ -157,15 +158,15 @@ public class MemberServiceImpl implements MemberService {
             String savedProfilePictureName = customFileUtil.saveProfilePicture(profileName);
             member.setProfileName(savedProfilePictureName); // 엔티티에 프로필 사진 이름 설정
         }
-
-        member.changeName(memberModifyDTO.getName());
-        member.changeEmail(memberModifyDTO.getEmail());
-        member.changeHireDate(memberModifyDTO.getHireDate());
-        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
-        member.changeDepartment(memberModifyDTO.getDepartment());
-        member.changePhone(memberModifyDTO.getPhone());
-        member.changeAddress(memberModifyDTO.getAddress());
-        member.changePosition(memberModifyDTO.getPosition());
+        modelMapper.map(memberModifyDTO, member);
+//        member.changeName(memberModifyDTO.getName());
+//        member.changeEmail(memberModifyDTO.getEmail());
+//        member.changeHireDate(memberModifyDTO.getHireDate());
+//        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
+//        member.changeDepartment(memberModifyDTO.getDepartment());
+//        member.changePhone(memberModifyDTO.getPhone());
+//        member.changeAddress(memberModifyDTO.getAddress());
+//        member.changePosition(memberModifyDTO.getPosition());
         memberRepository.save(member);
     }
 

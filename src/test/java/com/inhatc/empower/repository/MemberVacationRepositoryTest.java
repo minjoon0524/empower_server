@@ -232,7 +232,7 @@ public class MemberVacationRepositoryTest {
         log.info("----------testGetOneVacationList Test----------");
 
         String eid="2024999";
-                PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
                 .page(1)
                 .size(10)
                 .build();

@@ -26,7 +26,6 @@ public class MemberDTO extends User {
     private String phone;
     private String address;
     private String position;//직급
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate hireDate; //입사일
     private boolean memberCheck; // 가입 여부
     private String  profileName;

@@ -1,9 +1,6 @@
 package com.inhatc.empower.controller;
 
-import com.inhatc.empower.dto.MemberVacationAttendanceDTO;
-import com.inhatc.empower.dto.MemberVacationDTO;
-import com.inhatc.empower.dto.PageRequestDTO;
-import com.inhatc.empower.dto.PageResponseDTO;
+import com.inhatc.empower.dto.*;
 import com.inhatc.empower.service.MemberVacationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,10 +43,10 @@ public class MemberVacationController {
 
     // 휴가등록
     @PostMapping("/register")
-    public Map<String,Long> registerVacation(@RequestBody MemberVacationDTO memberVacationDTO){
+    public Map<String,String> registerVacation(@RequestBody MemberVacationModifyDTO memberVacationDTO){
         log.info("============== 휴가 등록 ==============");
-        Long vacId = memberVacationService.insertVacation(memberVacationDTO);
-        return Map.of("result",vacId);
+        String s = memberVacationService.insertVacation(memberVacationDTO);
+        return Map.of("result",s);
     }
 
     // 휴가 승인(관리자)

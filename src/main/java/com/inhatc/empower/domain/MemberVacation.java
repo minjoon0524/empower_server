@@ -28,7 +28,7 @@ public class MemberVacation extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LeaveType vacType; //일반(반차), 병가 , 조사(배우자5) ,조사(부모님5),조사(형제1), 예비군
     @Enumerated(EnumType.STRING)
-    private MemberVacationStatus vacStatus; //승인상태(관리자)
+    private MemberVacationStatus vacStatus=MemberVacationStatus.PENDING; //승인상태(관리자)
 
     private LocalDate vacStartDate; // 시작일
     private LocalDate vacEndDate; // 종료일

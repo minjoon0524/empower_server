@@ -1,10 +1,12 @@
 package com.inhatc.empower.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.inhatc.empower.constant.LeaveType;
 import com.inhatc.empower.constant.MemberVacationStatus;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,4 +26,6 @@ public class MemberVacationDTO {
     private LocalDate vacStartDate; // 시작일
     private LocalDate vacEndDate; // 종료일
     private String vacDescription; // 사유
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime regTime;
 }

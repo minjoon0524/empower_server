@@ -68,4 +68,17 @@ org:
       path: upload
 
 
-
+####################################
+# 메일 설정
+####################################
+mail:
+  host: smtp.gmail.com            # SMTP 서버 주소
+  port: 587                       # SMTP 포트
+  username: minjoon0524@naver.com # 이메일 주소
+  password: uixcnltqiwppocpk   # 이메일 비밀번호
+  properties:
+    mail:
+      smtp:
+        auth: true                # 인증 필요
+        starttls:
+          enable: true
