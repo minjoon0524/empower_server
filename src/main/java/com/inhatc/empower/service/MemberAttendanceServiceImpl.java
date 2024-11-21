@@ -118,19 +118,16 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                 .build();
     }
     @Override
-    public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(PageRequestDTO pageRequestDTO, String option, String term, LocalDate date) {
-        // Pageable 객체 생성
+    public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(PageRequestDTO pageRequestDTO, String option, String term, LocalDate startDate, LocalDate endDate) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("checkInTime").descending());
-
-        // MemberAttendance 리스트 조회
         Page<MemberAttendance> result;
 
-        // 날짜와 검색 옵션으로 조회
-        if (date != null) {
-            LocalDateTime startDateTime = date.atStartOfDay();
-            LocalDateTime endDateTime = date.plusDays(1).atStartOfDay();
+        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
+        LocalDateTime endDateTime = (endDate != null) ? endDate.plusDays(1).atStartOfDay() : null;
 
-            // 검색 옵션에 따라 필터링
+        // 필터링 조건
+        if (startDateTime != null && endDateTime != null) {
+            // 날짜가 있는 경우
             if (option != null && term != null && !term.isEmpty()) {
                 switch (option) {
                     case "name":
@@ -152,15 +149,38 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                         result = memberAttendanceRepository.findByCheckInTimeBetween(startDateTime, endDateTime, pageable);
                 }
             } else {
-                // 검색 옵션이 비어 있는 경우, 날짜에 맞는 모든 출퇴근 기록 조회
+                // 검색 조건이 없고, 날짜만 있는 경우
                 result = memberAttendanceRepository.findByCheckInTimeBetween(startDateTime, endDateTime, pageable);
             }
         } else {
-            // 날짜가 주어지지 않은 경우 모든 출퇴근 기록 조회
-            result = memberAttendanceRepository.getMemberAttendance(pageable);
+            // 날짜가 없는 경우
+            if (option != null && term != null && !term.isEmpty()) {
+                switch (option) {
+                    case "name":
+                        result = memberAttendanceRepository.findByMember_NameContaining(term, pageable);
+                        break;
+                    case "department":
+                        result = memberAttendanceRepository.findByMember_DepartmentContaining(term, pageable);
+                        break;
+                    case "position":
+                        result = memberAttendanceRepository.findByMember_PositionContaining(term, pageable);
+                        break;
+                    case "email":
+                        result = memberAttendanceRepository.findByMember_EmailContaining(term, pageable);
+                        break;
+                    case "status":
+                        result = memberAttendanceRepository.findByStatus(MemberAttendanceStatus.valueOf(term.toUpperCase()), pageable);
+                        break;
+                    default:
+                        result = memberAttendanceRepository.findAll(pageable);
+                }
+            } else {
+                // 날짜와 검색 조건이 모두 없는 경우
+                result = memberAttendanceRepository.findAll(pageable);
+            }
         }
 
-        // MemberAttendanceDTO 리스트 생성
+        // DTO 변환 및 응답 생성
         List<MemberAttendanceDTO> dtoList = result.getContent().stream().map(attendance ->
                 MemberAttendanceDTO.builder()
                         .employeeId(attendance.getEmployeeId())
@@ -173,13 +193,9 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                         .build()
         ).collect(Collectors.toList());
 
-        // 전체 출퇴근 기록 수
-        long totalCount = result.getTotalElements();
-
-        // PageResponseDTO 반환
         return PageResponseDTO.<MemberAttendanceDTO>withAll()
                 .dtoList(dtoList)
-                .totalCount(totalCount)
+                .totalCount(result.getTotalElements())
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }

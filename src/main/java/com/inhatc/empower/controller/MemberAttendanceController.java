@@ -25,9 +25,10 @@ public class MemberAttendanceController {
             PageRequestDTO pageRequestDTO,
             @RequestParam(name = "option", required = false) String option,
             @RequestParam(name = "term", required = false) String term,
-            @RequestParam(name = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         log.info("list..........." + pageRequestDTO);
-        return memberAttendanceService.getAttendanceList(pageRequestDTO, option, term, date);
+        return memberAttendanceService.getAttendanceList(pageRequestDTO, option, term, startDate, endDate);
     }
 
     // 로그인한 사용자 근태기록(전체)

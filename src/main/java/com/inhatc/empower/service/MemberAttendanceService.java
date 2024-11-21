@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public interface MemberAttendanceService {
     public PageResponseDTO<MemberAttendanceDTO> getOneMemberAttendance(PageRequestDTO pageRequestDTO, String eid);
     public PageResponseDTO<MemberAttendanceDTO> getAttendanceByDate(PageRequestDTO pageRequestDTO, String eid, LocalDate date);
-    public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(PageRequestDTO pageRequestDTO, String option, String term, LocalDate date);
+    public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(PageRequestDTO pageRequestDTO, String option, String term, LocalDate startDate,LocalDate endDate);
     public void checkIn(String eid);
     public void checkOut(String eid);
 }
