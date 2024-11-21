@@ -30,7 +30,7 @@ public interface MemberAttendanceRepository extends JpaRepository<MemberAttendan
 
     Page<MemberAttendance> findByMember_PositionContainingAndCheckInTimeBetween(String position, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
-    Page<MemberAttendance> findByMember_EmailContainingAndCheckInTimeBetween(String email, LocalDateTime start, LocalDateTime end, Pageable pageable);
+    Page<MemberAttendance> findByMember_EidContainingAndCheckInTimeBetween(String email, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
     Page<MemberAttendance> findByStatusAndCheckInTimeBetween(MemberAttendanceStatus status, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
@@ -41,7 +41,9 @@ public interface MemberAttendanceRepository extends JpaRepository<MemberAttendan
 
     Page<MemberAttendance> findByMember_PositionContaining(String position, Pageable pageable);
 
-    Page<MemberAttendance> findByMember_EmailContaining(String email, Pageable pageable);
+
 
     Page<MemberAttendance> findByStatus(MemberAttendanceStatus status, Pageable pageable);
+
+    Page<MemberAttendance> findByMember_EidContaining(String eid, Pageable pageable);
 }

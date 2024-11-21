@@ -139,8 +139,8 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                     case "position":
                         result = memberAttendanceRepository.findByMember_PositionContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
                         break;
-                    case "email":
-                        result = memberAttendanceRepository.findByMember_EmailContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
+                    case "eid": // 이메일 대신 직원 ID로 변경
+                        result = memberAttendanceRepository.findByMember_EidContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
                         break;
                     case "status":
                         result = memberAttendanceRepository.findByStatusAndCheckInTimeBetween(MemberAttendanceStatus.valueOf(term.toUpperCase()), startDateTime, endDateTime, pageable);
@@ -165,8 +165,8 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                     case "position":
                         result = memberAttendanceRepository.findByMember_PositionContaining(term, pageable);
                         break;
-                    case "email":
-                        result = memberAttendanceRepository.findByMember_EmailContaining(term, pageable);
+                    case "eid": // 이메일 대신 직원 ID로 변경
+                        result = memberAttendanceRepository.findByMember_EidContaining(term, pageable);
                         break;
                     case "status":
                         result = memberAttendanceRepository.findByStatus(MemberAttendanceStatus.valueOf(term.toUpperCase()), pageable);
