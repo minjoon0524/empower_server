@@ -1,5 +1,6 @@
 package com.inhatc.empower.controller;
 
+import com.inhatc.empower.constant.MemberRole;
 import com.inhatc.empower.dto.*;
 import com.inhatc.empower.service.MemberService;
 import com.inhatc.empower.util.CustomFileUtil;
@@ -8,9 +9,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -66,11 +71,36 @@ public class MemberController {
         String eid = memberService.register(memberAddDTO);
         return Map.of("EID", eid);
     }
+    // 권한 부여를 위한 함수
+    @PostMapping("/grant/{eid}")
+    public Map<String, List<MemberRole>> grant(@PathVariable(name="eid") String eid) {
+        List<MemberRole> memberRoles = memberService.grantUser(eid);
+        return Map.of("EID", memberRoles);
+    }
+
+
     @DeleteMapping("/{eid}")
     public Map<String, String> remove(@PathVariable(name="eid") String eid) {
         log.info("Remove: " + eid);
         memberService.remove(eid);
         return Map.of("RESULT", "SUCCESS");
+    }
+
+
+    @GetMapping("/loginOk")
+    public ResponseEntity<Map<String, String>> loginOk() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        String authorities = authentication.getAuthorities().toString();
+
+        System.out.println("로그인한 유저 이메일:" + email);
+        System.out.println("유저 권한:" + authentication.getAuthorities());
+
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("email", email);
+        userInfo.put("authorities", authorities);
+
+        return ResponseEntity.ok(userInfo);
     }
 
 

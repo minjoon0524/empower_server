@@ -1,5 +1,6 @@
 package com.inhatc.empower.service;
 
+import com.inhatc.empower.controller.MemberController;
 import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.constant.MemberRole;
 import com.inhatc.empower.dto.*;
@@ -31,6 +32,8 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomFileUtil customFileUtil; // CustomFileUtil 주입
     private final ModelMapper modelMapper;
+
+
     @Override
     public PageResponseDTO<MemberSearchDTO> getMemberList(PageRequestDTO pageRequestDTO, String option, String term) {
         // Pageable 객체 생성
@@ -151,6 +154,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void modify(MemberModifyDTO memberModifyDTO, MultipartFile profileName) {
+        // 회원정보 가져오기
         Member member = memberRepository.getWithRoles(memberModifyDTO.getEid());
 
         // 프로필 사진 업로드
@@ -158,20 +162,31 @@ public class MemberServiceImpl implements MemberService {
             String savedProfilePictureName = customFileUtil.saveProfilePicture(profileName);
             member.setProfileName(savedProfilePictureName); // 엔티티에 프로필 사진 이름 설정
         }
-        modelMapper.map(memberModifyDTO, member);
-//        member.changeName(memberModifyDTO.getName());
-//        member.changeEmail(memberModifyDTO.getEmail());
-//        member.changeHireDate(memberModifyDTO.getHireDate());
-//        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
-//        member.changeDepartment(memberModifyDTO.getDepartment());
-//        member.changePhone(memberModifyDTO.getPhone());
-//        member.changeAddress(memberModifyDTO.getAddress());
-//        member.changePosition(memberModifyDTO.getPosition());
+//        modelMapper.map(memberModifyDTO, member);
+
+        member.changeName(memberModifyDTO.getName());
+        member.changeEmail(memberModifyDTO.getEmail());
+        member.changeHireDate(memberModifyDTO.getHireDate());
+        member.changeDepartment(memberModifyDTO.getDepartment());
+        member.changePhone(memberModifyDTO.getPhone());
+        member.changeAddress(memberModifyDTO.getAddress());
+        member.changePosition(memberModifyDTO.getPosition());
         memberRepository.save(member);
     }
 
     @Override
     public void remove(String eid) {
         memberRepository.deleteById(eid);
+    }
+    
+    // 권한 부여
+    @Override
+    public List<MemberRole> grantUser(String eid) {
+        log.info("============ 권한 부여 =============");
+        Member member = memberRepository.getWithRoles(eid);
+        member.clearRole();
+        member.addRole(MemberRole.ADMIN);
+        memberRepository.save(member);
+        return member.getMemberRoleList();
     }
 }

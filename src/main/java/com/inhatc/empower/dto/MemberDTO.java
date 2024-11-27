@@ -34,7 +34,7 @@ public class MemberDTO extends User {
 
     public MemberDTO(String eid, String email, String pw,String name,
                      String department, String phone, String address, String position,
-                     LocalDate hireDate, boolean memberCheck, List<String> roleNames) {
+                     LocalDate hireDate, boolean memberCheck, String  profileName,List<String> roleNames) {
         super(eid,pw, roleNames.stream().map(str->
                 new SimpleGrantedAuthority("ROLE_"+str)).collect(Collectors.toList()));
         this.eid = eid;
@@ -47,6 +47,7 @@ public class MemberDTO extends User {
         this.position = position;
         this.hireDate = hireDate;
         this.memberCheck = memberCheck;
+        this.profileName=profileName;
         this.roleNames = roleNames;
 
     }
@@ -67,6 +68,7 @@ public class MemberDTO extends User {
         dataMap.put("position", position);
         dataMap.put("hireDate", hireDate);
         dataMap.put("memberCheck", memberCheck);
+        dataMap.put("profileName", profileName);
         dataMap.put("roleNames", roleNames);
 
         System.out.println("======== dataMap 확인"+ dataMap);

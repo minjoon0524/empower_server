@@ -22,6 +22,7 @@ public class MemberModifyDTO {
     private String phone;
     private String address;
     private String position;//직급
+
     private LocalDate hireDate; //입사일
     private String profileName; // 프로필 사진 파일 이름 추가
 

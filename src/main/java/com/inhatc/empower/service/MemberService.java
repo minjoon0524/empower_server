@@ -1,11 +1,13 @@
 package com.inhatc.empower.service;
 
+import com.inhatc.empower.constant.MemberRole;
 import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Transactional
 public interface MemberService {
@@ -21,22 +23,25 @@ public interface MemberService {
     //    삭제
     void remove(String eid);
 
+    //    권한
+    List<MemberRole> grantUser(String eid);
 
-default MemberDTO entityToDto(Member member) {
-    MemberDTO memberDTO = new MemberDTO();
-    memberDTO.setEid(member.getEid());
-    memberDTO.setName(member.getName());
-    memberDTO.setPw(member.getPw());
-    memberDTO.setDepartment(member.getDepartment());
-    memberDTO.setEmail(member.getEmail());
-    memberDTO.setPhone(member.getPhone());
-    memberDTO.setAddress(member.getAddress());
-    memberDTO.setPosition(member.getPosition());
-    memberDTO.setHireDate(member.getHireDate());
-    memberDTO.setMemberCheck(member.isMemberCheck());
 
-    return memberDTO;
-}
+    default MemberDTO entityToDto(Member member) {
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setEid(member.getEid());
+        memberDTO.setName(member.getName());
+        memberDTO.setPw(member.getPw());
+        memberDTO.setDepartment(member.getDepartment());
+        memberDTO.setEmail(member.getEmail());
+        memberDTO.setPhone(member.getPhone());
+        memberDTO.setAddress(member.getAddress());
+        memberDTO.setPosition(member.getPosition());
+        memberDTO.setHireDate(member.getHireDate());
+        memberDTO.setMemberCheck(member.isMemberCheck());
+
+        return memberDTO;
+    }
 
 
     default Member dtoToEntity(MemberDTO memberDTO) {
