@@ -26,7 +26,7 @@ public class IpAccessInterceptor implements HandlerInterceptor {
                              HttpServletResponse response, Object handler) throws Exception {
         String clientIp = ClientIpUtil.getClientIP(request);
         log.info(clientIp);
-        if (clientIp.equals("127.0.0.2")) {
+        if (clientIp.equals("127.0.0.１")) {
             // 로컬 접속이면 당연히 true
             return true;
         }

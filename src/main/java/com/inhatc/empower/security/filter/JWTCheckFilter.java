@@ -75,11 +75,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String position = (String) claims.get("position");
             LocalDate hireDate = (LocalDate) claims.get("hireDate");
             Boolean memberCheck = (Boolean) claims.get("memberCheck");
+            String profileName = (String) claims.get("profileName");
             List<String> roleNames = (List<String>) claims.get("roleNames");
 
             MemberDTO memberDTO = new MemberDTO(eid, name, pw, department,
                     email, phone, address, position,
-                    hireDate, memberCheck, roleNames);
+                    hireDate, memberCheck, profileName,roleNames);
 
             log.info("-----------------------------------");
             log.info(memberDTO);

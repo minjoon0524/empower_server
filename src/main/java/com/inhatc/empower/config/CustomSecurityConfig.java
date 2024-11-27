@@ -42,6 +42,7 @@ public class CustomSecurityConfig {
                 }
 
         );
+        // JWTCheckFilter가 UsernamePasswordAuthenticationFilter보다 먼저 실행
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(config->{
