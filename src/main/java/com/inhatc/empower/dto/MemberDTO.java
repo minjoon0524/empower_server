@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +67,7 @@ public class MemberDTO extends User {
         dataMap.put("phone", phone);
         dataMap.put("address", address);
         dataMap.put("position", position);
-        dataMap.put("hireDate", hireDate);
+//        dataMap.put("hireDate", hireDate);
         dataMap.put("memberCheck", memberCheck);
         dataMap.put("profileName", profileName);
         dataMap.put("roleNames", roleNames);

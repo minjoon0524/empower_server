@@ -1,5 +1,6 @@
 package com.inhatc.empower.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.inhatc.empower.common.entity.BaseEntity;
 import com.inhatc.empower.constant.MemberRole;
 import jakarta.persistence.*;

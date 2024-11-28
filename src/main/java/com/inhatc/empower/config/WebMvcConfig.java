@@ -1,8 +1,10 @@
 package com.inhatc.empower.config;
 
+import com.inhatc.empower.controller.formatter.LocalDateFormatter;
 import com.inhatc.empower.interceptor.IpAccessInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,5 +20,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/static/**")
                 .excludePathPatterns("/error/**")
                 .excludePathPatterns("/api/**");
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new LocalDateFormatter());
     }
 }
