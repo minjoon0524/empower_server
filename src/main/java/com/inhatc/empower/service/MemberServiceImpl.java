@@ -162,9 +162,9 @@ public class MemberServiceImpl implements MemberService {
             String savedProfilePictureName = customFileUtil.saveProfilePicture(profileName);
             member.setProfileName(savedProfilePictureName); // 엔티티에 프로필 사진 이름 설정
         }
-//        modelMapper.map(memberModifyDTO, member);
 
         member.changeName(memberModifyDTO.getName());
+        member.changePw(memberModifyDTO.getPw());
         member.changeEmail(memberModifyDTO.getEmail());
         member.changeHireDate(memberModifyDTO.getHireDate());
         member.changeDepartment(memberModifyDTO.getDepartment());
