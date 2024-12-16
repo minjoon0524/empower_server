@@ -15,17 +15,11 @@
 - 보안 : SpringSecurity JWT 활용, IP접근제한
 
 ## 3. 개발환경
-| 구분 | 내용 |
-| --- | --- |
-| 개발툴(프론트) | Visual Studio Code |
-| 개발툴(백엔드) | IntelliJ Ultimate IDE |
-| 사용언어(프론트) | JacaScript,React |
-| 사용언어(백엔드) | Java |
-| 프레임워크(백엔드) | SpringBoot |
-| 데이터베이스 | MySql |
-| 백엔드 기술 세부스택 | SpringSecurity, JWT |
-| 프론트엔드 기술 세부스텍 | Redux,react-cookie,Axios |
-| 배포 | AWS EC2 |
+| Environment | Frontend                                                                                                  | Backend                                                                                             | Database                                                                                   | Deployment                                                                                     |
+|-------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white) | ![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black) ![React](https://img.shields.io/badge/react-%2361DAFB.svg?style=for-the-badge&logo=react&logoColor=black) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) | ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![Spring Boot](https://img.shields.io/badge/spring%20boot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) | ![MySQL](https://img.shields.io/badge/mysql-%234479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) | ![AWS EC2](https://img.shields.io/badge/AWS%20EC2-%23232F3E.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) |
+
+
 
 ## 4. 시스템 아키텍처(구조)
 ![스크린샷 2024-11-27 155018](https://github.com/user-attachments/assets/29657246-2296-4ef5-93ee-1c19c46772d3)
