@@ -90,11 +90,11 @@
 
 |휴가 신청|
 |:---:|
-![휴가신청](https://github.com/user-attachments/assets/804cd3bf-f055-4a44-8876-5c5902ace959)
+![휴가신청](https://github.com/user-attachments/assets/a25e88fe-8e9f-400a-a1dd-18b4bbb4d9ad)
 
 |휴가 승인 및 반려|
 |:---:|
-![관리자 휴가](https://github.com/user-attachments/assets/8cef0742-1e2f-4c68-850b-f35f65c0d340)
+![휴가 신청 승인 및 거절](https://github.com/user-attachments/assets/97009cef-a202-4929-8b26-9cac614cf6df)
 
 |사원 휴가신청내역|
 |:---:|
@@ -102,7 +102,7 @@
 
 |휴가 수정 및 삭제|
 |:---:|
-![휴가 신청 수정 및 삭제](https://github.com/user-attachments/assets/ffbd9eb4-11e8-47c4-bc43-718d87221e5f)
+![휴가 삭제 및 수정](https://github.com/user-attachments/assets/596ecc9a-abb0-4ae6-9a48-efcfc941c86b)
 
 
 
