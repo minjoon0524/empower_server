@@ -40,7 +40,7 @@
 
 |로그인|
 |:---:|
-![로그인](https://github.com/user-attachments/assets/a6d70e87-1e50-4183-885a-0e97798ab785)
+![로그인](https://github.com/user-attachments/assets/e8c5607f-93e7-46e5-a159-d6e628efedd7)
 
 ### 2) 인사관리
 - 관리자와 사용자는 인사내역조회가 가능합니다. <br>
@@ -65,7 +65,7 @@
 
 |사원수정|
 |:---:|
-![사원수정](https://github.com/user-attachments/assets/d1864d4e-c023-4c4c-9b1e-2480b57d0429))
+![사원수정](https://github.com/user-attachments/assets/d1864d4e-c023-4c4c-9b1e-2480b57d0429)
 
 ### 3) 근태관리
 - 사원은 출퇴근 등록을 할 수 있습니다. <br>
@@ -73,11 +73,12 @@
 
 |출퇴근 등록|
 |:---:|
-![근태](https://github.com/user-attachments/assets/a1129c59-2a1d-4547-8f79-adad44c1f13c)
+![근태관리](https://github.com/user-attachments/assets/194185a5-2c67-4e55-9b7a-ae77168b3ba5)
+
 
 |출퇴근 조회|
 |:---:|
-![근태 관리자](https://github.com/user-attachments/assets/9bf7cad0-d049-4853-8a9e-8cc679b50e2a)
+![근태조회](https://github.com/user-attachments/assets/1208a33f-4aab-4831-aa54-18dc89a5ecf0)
 
 
 ### 4) 휴가관리
