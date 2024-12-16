@@ -48,24 +48,24 @@
 
 |인적사항조회|
 |:---:|
-![인적사항조회](https://github.com/user-attachments/assets/2e70f214-f754-42b5-beed-1d882a04f73e)
+![인적사항조회](https://github.com/user-attachments/assets/0c4e4409-4401-4bf9-ab86-0d6bccf57ec0)
 
 
 |사원추가|
 |:---:|
-![사원추가ㅣ](https://github.com/user-attachments/assets/a836a7bb-7b72-4290-b644-67229b14f3fa)
+![사원추가](https://github.com/user-attachments/assets/f97a1bd1-58d2-4363-915d-230442ae76aa)
 
 |사원수정|
 |:---:|
-![사원수정](https://github.com/user-attachments/assets/d1864d4e-c023-4c4c-9b1e-2480b57d0429)
+![회원수정](https://github.com/user-attachments/assets/780d7aec-487b-4299-8bc1-e05c89a97f9c)
 
 |사원상세내역|
 |:---:|
 ![사원상세내역](https://github.com/user-attachments/assets/8019b32d-703d-4718-a06f-da4e51c4571f)
 
-|사원수정|
+|권한부여|
 |:---:|
-![사원수정](https://github.com/user-attachments/assets/d1864d4e-c023-4c4c-9b1e-2480b57d0429)
+![권한부여](https://github.com/user-attachments/assets/7901e837-b987-4530-b1a1-20635e38df51)
 
 ### 3) 근태관리
 - 사원은 출퇴근 등록을 할 수 있습니다. <br>
