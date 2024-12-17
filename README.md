@@ -15,17 +15,12 @@
 - 보안 : SpringSecurity JWT 활용, IP접근제한
 
 ## 3. 개발환경
-| 구분 | 내용 |
-| --- | --- |
-| 개발툴(프론트) | Visual Studio Code |
-| 개발툴(백엔드) | IntelliJ Ultimate IDE |
-| 사용언어(프론트) | JacaScript,React |
-| 사용언어(백엔드) | Java |
-| 프레임워크(백엔드) | SpringBoot |
-| 데이터베이스 | MySql |
-| 백엔드 기술 세부스택 | SpringSecurity, JWT |
-| 프론트엔드 기술 세부스텍 | Redux,react-cookie,Axios |
-| 배포 | AWS EC2 |
+| Environment | Frontend                                                                                                  | Backend                                                                                             | Database                                                                                   | Deployment                                                                                     |
+|-------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white) | ![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black) ![React](https://img.shields.io/badge/react-%2361DAFB.svg?style=for-the-badge&logo=react&logoColor=black) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) | ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![Spring Boot](https://img.shields.io/badge/spring%20boot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![Spring Security](https://img.shields.io/badge/spring%20security-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) | ![MySQL](https://img.shields.io/badge/mysql-%234479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) | ![AWS EC2](https://img.shields.io/badge/AWS%20EC2-%23232F3E.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) |
+
+
+
 
 ## 4. 시스템 아키텍처(구조)
 ![스크린샷 2024-11-27 155018](https://github.com/user-attachments/assets/29657246-2296-4ef5-93ee-1c19c46772d3)
@@ -40,7 +35,7 @@
 
 |로그인|
 |:---:|
-![로그인](https://github.com/user-attachments/assets/a6d70e87-1e50-4183-885a-0e97798ab785)
+![로그인](https://github.com/user-attachments/assets/e8c5607f-93e7-46e5-a159-d6e628efedd7)
 
 ### 2) 인사관리
 - 관리자와 사용자는 인사내역조회가 가능합니다. <br>
@@ -48,24 +43,24 @@
 
 |인적사항조회|
 |:---:|
-![인적사항조회](https://github.com/user-attachments/assets/2e70f214-f754-42b5-beed-1d882a04f73e)
+![인적사항조회](https://github.com/user-attachments/assets/0c4e4409-4401-4bf9-ab86-0d6bccf57ec0)
 
 
 |사원추가|
 |:---:|
-![사원추가ㅣ](https://github.com/user-attachments/assets/a836a7bb-7b72-4290-b644-67229b14f3fa)
+![사원추가](https://github.com/user-attachments/assets/f97a1bd1-58d2-4363-915d-230442ae76aa)
 
 |사원수정|
 |:---:|
-![사원수정](https://github.com/user-attachments/assets/d1864d4e-c023-4c4c-9b1e-2480b57d0429)
+![회원수정](https://github.com/user-attachments/assets/780d7aec-487b-4299-8bc1-e05c89a97f9c)
 
 |사원상세내역|
 |:---:|
 ![사원상세내역](https://github.com/user-attachments/assets/8019b32d-703d-4718-a06f-da4e51c4571f)
 
-|사원수정|
+|권한부여|
 |:---:|
-![사원수정](https://github.com/user-attachments/assets/d1864d4e-c023-4c4c-9b1e-2480b57d0429))
+![권한부여](https://github.com/user-attachments/assets/7901e837-b987-4530-b1a1-20635e38df51)
 
 ### 3) 근태관리
 - 사원은 출퇴근 등록을 할 수 있습니다. <br>
@@ -73,11 +68,12 @@
 
 |출퇴근 등록|
 |:---:|
-![근태](https://github.com/user-attachments/assets/a1129c59-2a1d-4547-8f79-adad44c1f13c)
+![근태관리](https://github.com/user-attachments/assets/194185a5-2c67-4e55-9b7a-ae77168b3ba5)
+
 
 |출퇴근 조회|
 |:---:|
-![근태 관리자](https://github.com/user-attachments/assets/9bf7cad0-d049-4853-8a9e-8cc679b50e2a)
+![근태조회](https://github.com/user-attachments/assets/1208a33f-4aab-4831-aa54-18dc89a5ecf0)
 
 
 ### 4) 휴가관리
@@ -89,11 +85,11 @@
 
 |휴가 신청|
 |:---:|
-![휴가신청](https://github.com/user-attachments/assets/804cd3bf-f055-4a44-8876-5c5902ace959)
+![휴가신청](https://github.com/user-attachments/assets/a25e88fe-8e9f-400a-a1dd-18b4bbb4d9ad)
 
 |휴가 승인 및 반려|
 |:---:|
-![관리자 휴가](https://github.com/user-attachments/assets/8cef0742-1e2f-4c68-850b-f35f65c0d340)
+![휴가 신청 승인 및 거절](https://github.com/user-attachments/assets/97009cef-a202-4929-8b26-9cac614cf6df)
 
 |사원 휴가신청내역|
 |:---:|
@@ -101,7 +97,7 @@
 
 |휴가 수정 및 삭제|
 |:---:|
-![휴가 신청 수정 및 삭제](https://github.com/user-attachments/assets/ffbd9eb4-11e8-47c4-bc43-718d87221e5f)
+![휴가 삭제 및 수정](https://github.com/user-attachments/assets/596ecc9a-abb0-4ae6-9a48-efcfc941c86b)
 
 
 
