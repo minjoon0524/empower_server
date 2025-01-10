@@ -5,7 +5,11 @@ import com.inhatc.empower.domain.MemberVacation;
 import com.inhatc.empower.domain.QMemberVacation;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Repository;
 
@@ -19,33 +23,14 @@ public class VacationRepositoryImpl implements VacationRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<MemberVacation> findVacation(Pageable pageable,String status) {
+    public List<MemberVacation> findVacation(Pageable pageable, String status) {
         QMemberVacation vaca = QMemberVacation.memberVacation;
-        // 쿼리 실행
-        List<MemberVacation> vacations = jpaQueryFactory
-                .selectFrom(vaca)
-                .where(
-                        vaca.vacStatus.eq(MemberVacationStatus.valueOf(status))
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+        return jpaQueryFactory.selectFrom(vaca)
+                .where(vaca.vacStatus.eq(MemberVacationStatus.valueOf(status)))
                 .fetch();
 
-        // 전체 데이터 수 조회 (페이지 계산을 위해)
-        long total = jpaQueryFactory
-                .selectFrom(vaca)
-                .where(
-                        vaca.vacStatus.eq(MemberVacationStatus.valueOf(status))
-                )
-                .fetchCount();
-
-        return new PageImpl<>(vacations, pageable, total);
     }
 
-    @Override
-    public Page<MemberVacation> findByMemberEid(Pageable pageable, String eid) {
-        return null;
-    }
 
 
     @Override

@@ -75,6 +75,13 @@ public class MemberVacationController {
         return Map.of("Modify Result : ",vacId);
     }
 
+    // 휴가 상태에 따라 리스트 출력
+    @GetMapping("/status")
+    public PageResponseDTO<MemberVacationDTO> getMemberVacationStatus(PageRequestDTO pageRequestDTO,@RequestParam(name = "status") String status){
+        log.info("============== 휴가 상태에 따라 리스트 출력  ==============");
+        return memberVacationService.getStatusVacationList(pageRequestDTO,status);
+    }
+
 
 
 

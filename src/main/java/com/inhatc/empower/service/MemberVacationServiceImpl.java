@@ -6,11 +6,12 @@ import com.inhatc.empower.domain.MemberVacation;
 import com.inhatc.empower.dto.*;
 import com.inhatc.empower.repository.MemberRepository;
 import com.inhatc.empower.repository.MemberVacationRepository;
+import com.inhatc.empower.repository.VacationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class MemberVacationServiceImpl implements MemberVacationService {
     private final MemberVacationRepository memberVacationRepository;
     private final ModelMapper modelMapper;
     private final JavaMailSender mailSender;
+    private final VacationRepository vacationRepository;
 
     @Override
     public String insertVacation(MemberVacationModifyDTO memberVacationModifyDTO) {
@@ -52,6 +54,7 @@ public class MemberVacationServiceImpl implements MemberVacationService {
         return memberVacationModifyDTO.getEid();
     }
 
+    // 전체 휴가 리스트 출력
     @Transactional(readOnly = true)
     @Override
     public PageResponseDTO<MemberVacationDTO> getAllVacationList(PageRequestDTO pageRequestDTO) {
@@ -198,6 +201,42 @@ public class MemberVacationServiceImpl implements MemberVacationService {
         return PageResponseDTO.<MemberVacationDTO>withAll()
                 .dtoList(dtoList)
                 .totalCount(vacationPage.getTotalElements())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<MemberVacationDTO> getStatusVacationList(PageRequestDTO pageRequestDTO, String status) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("vac_start_date").descending()
+        );
+
+        List<MemberVacation> vacation = vacationRepository.findVacation(pageable, status);
+
+
+
+        List<MemberVacationDTO> dtoList = vacation.stream()
+                .map(vacationItem -> MemberVacationDTO.builder()
+                        .vacId(vacationItem.getVacId())
+                        .eid(vacationItem.getMember().getEid())
+                        .memberName(vacationItem.getMember().getName())
+                        .department(vacationItem.getMember().getDepartment())
+                        .position(vacationItem.getMember().getPosition())
+                        .vacType(vacationItem.getVacType())
+                        .vacStatus(vacationItem.getVacStatus())
+                        .vacStartDate(vacationItem.getVacStartDate())
+                        .vacEndDate(vacationItem.getVacEndDate())
+                        .vacDescription(vacationItem.getVacDescription())
+                        .regTime(vacationItem.getRegTime())
+                        .build())
+                .collect(Collectors.toList());
+
+
+        return PageResponseDTO.<MemberVacationDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(vacation.size())
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }

@@ -26,5 +26,7 @@ public interface MemberVacationService {
     // 클라이언트는 "eid" 를 보내준다.
     PageResponseDTO<MemberVacationDTO> getOneVacationList(PageRequestDTO pageRequestDTO,String eid);
 
+    // 8. 휴가 상태에 따라 리스트 출력
+    PageResponseDTO<MemberVacationDTO> getStatusVacationList(PageRequestDTO pageRequestDTO,String status);
 
 }
