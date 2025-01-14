@@ -13,8 +13,6 @@ import java.util.Optional;
 
 public interface MemberVacationRepository extends JpaRepository<MemberVacation,Long> {
 
-    Page<MemberVacation> findByMemberEid(String eid, Pageable pageable);
-
     @EntityGraph(attributePaths = {"member"})
     Page<MemberVacation> findAll(Pageable pageable);
 
