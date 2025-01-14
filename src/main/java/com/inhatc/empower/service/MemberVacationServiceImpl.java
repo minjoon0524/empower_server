@@ -213,11 +213,9 @@ public class MemberVacationServiceImpl implements MemberVacationService {
                 Sort.by("vac_start_date").descending()
         );
 
-        List<MemberVacation> vacation = vacationRepository.findVacation(pageable, status);
+        Page<MemberVacation> vacation = vacationRepository.findVacation(pageable, status);
 
-
-
-        List<MemberVacationDTO> dtoList = vacation.stream()
+        List<MemberVacationDTO> dtoList = vacation.getContent().stream() // 수정된 부분
                 .map(vacationItem -> MemberVacationDTO.builder()
                         .vacId(vacationItem.getVacId())
                         .eid(vacationItem.getMember().getEid())
@@ -233,10 +231,9 @@ public class MemberVacationServiceImpl implements MemberVacationService {
                         .build())
                 .collect(Collectors.toList());
 
-
         return PageResponseDTO.<MemberVacationDTO>withAll()
                 .dtoList(dtoList)
-                .totalCount(vacation.size())
+                .totalCount(vacation.getTotalElements())
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }

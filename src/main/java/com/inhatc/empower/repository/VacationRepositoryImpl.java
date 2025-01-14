@@ -5,11 +5,7 @@ import com.inhatc.empower.domain.MemberVacation;
 import com.inhatc.empower.domain.QMemberVacation;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Repository;
 
@@ -23,14 +19,19 @@ public class VacationRepositoryImpl implements VacationRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<MemberVacation> findVacation(Pageable pageable, String status) {
+    public Page<MemberVacation> findVacation(Pageable pageable, String status) {
         QMemberVacation vaca = QMemberVacation.memberVacation;
-        return jpaQueryFactory.selectFrom(vaca)
+        List<MemberVacation> content = jpaQueryFactory.selectFrom(vaca)
                 .where(vaca.vacStatus.eq(MemberVacationStatus.valueOf(status)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
-    }
+        long total = jpaQueryFactory.selectFrom(vaca)
+                .where(vaca.vacStatus.eq(MemberVacationStatus.valueOf(status)))
+                .fetchCount();
 
+        return new PageImpl<>(content, pageable, total);}
 
 
     @Override
