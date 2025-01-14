@@ -50,7 +50,7 @@ public class MemberVacationRepositoryTest {
         String status = "PENDING"; // 테스트할 상태
 
         // when
-        List<MemberVacation> vacation = vacationRepository.findVacation(pageable, status);
+        Page<MemberVacation> vacation = vacationRepository.findVacation(pageable, status);
 
         // then
         System.out.println("======================= 결과: " + vacation);
