@@ -8,6 +8,7 @@ import com.inhatc.empower.dto.MemberAttendanceDTO;
 import com.inhatc.empower.dto.MemberSearchDTO;
 import com.inhatc.empower.dto.PageRequestDTO;
 import com.inhatc.empower.dto.PageResponseDTO;
+import com.inhatc.empower.repository.MemberAttendanceCustomRepository;
 import com.inhatc.empower.repository.MemberAttendanceRepository;
 import com.inhatc.empower.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class MemberAttendanceServiceImpl implements MemberAttendanceService {
     private final MemberAttendanceRepository memberAttendanceRepository;
+    private final MemberAttendanceCustomRepository memberAttendanceCustomRepository;
     private final MemberRepository memberRepository;
 
 
@@ -117,72 +119,36 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
+
+    // 전체 근태내역 조회(관리자)    
     @Override
     public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(PageRequestDTO pageRequestDTO, String option, String term, LocalDate startDate, LocalDate endDate) {
+        // Pageable 설정
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("checkInTime").descending());
-        Page<MemberAttendance> result;
 
+        // 날짜 변환
         LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
         LocalDateTime endDateTime = (endDate != null) ? endDate.plusDays(1).atStartOfDay() : null;
 
-        // 필터링 조건
-        if (startDateTime != null && endDateTime != null) {
-            // 날짜가 있는 경우
-            if (option != null && term != null && !term.isEmpty()) {
-                switch (option) {
-                    case "name":
-                        result = memberAttendanceRepository.findByMember_NameContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
-                        break;
-                    case "department":
-                        result = memberAttendanceRepository.findByMember_DepartmentContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
-                        break;
-                    case "position":
-                        result = memberAttendanceRepository.findByMember_PositionContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
-                        break;
-                    case "eid": // 이메일 대신 직원 ID로 변경
-                        result = memberAttendanceRepository.findByMember_EidContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
-                        break;
-                    case "status":
-                        result = memberAttendanceRepository.findByStatusAndCheckInTimeBetween(MemberAttendanceStatus.valueOf(term.toUpperCase()), startDateTime, endDateTime, pageable);
-                        break;
-                    default:
-                        result = memberAttendanceRepository.findByCheckInTimeBetween(startDateTime, endDateTime, pageable);
-                }
-            } else {
-                // 검색 조건이 없고, 날짜만 있는 경우
-                result = memberAttendanceRepository.findByCheckInTimeBetween(startDateTime, endDateTime, pageable);
-            }
-        } else {
-            // 날짜가 없는 경우
-            if (option != null && term != null && !term.isEmpty()) {
-                switch (option) {
-                    case "name":
-                        result = memberAttendanceRepository.findByMember_NameContaining(term, pageable);
-                        break;
-                    case "department":
-                        result = memberAttendanceRepository.findByMember_DepartmentContaining(term, pageable);
-                        break;
-                    case "position":
-                        result = memberAttendanceRepository.findByMember_PositionContaining(term, pageable);
-                        break;
-                    case "eid": // 이메일 대신 직원 ID로 변경
-                        result = memberAttendanceRepository.findByMember_EidContaining(term, pageable);
-                        break;
-                    case "status":
-                        result = memberAttendanceRepository.findByStatus(MemberAttendanceStatus.valueOf(term.toUpperCase()), pageable);
-                        break;
-                    default:
-                        result = memberAttendanceRepository.findAll(pageable);
-                }
-            } else {
-                // 날짜와 검색 조건이 모두 없는 경우
-                result = memberAttendanceRepository.findAll(pageable);
-            }
+        // 상태 값 처리 (null일 경우 기본값 설정)
+        MemberAttendanceStatus status = null;
+        if (option != null && term != null && option.equals("status")) {
+            status = MemberAttendanceStatus.valueOf(term.toUpperCase());
         }
 
-        // DTO 변환 및 응답 생성
-        List<MemberAttendanceDTO> dtoList = result.getContent().stream().map(attendance ->
-                MemberAttendanceDTO.builder()
+        // Repository 호출
+        Page<MemberAttendance> result = memberAttendanceCustomRepository.findMemberAttendanceByDateAndOptions(
+                startDateTime, endDateTime,
+                option.equals("name") ? term : null,
+                option.equals("department") ? term : null,
+                option.equals("position") ? term : null,
+                option.equals("eid") ? term : null,
+                 pageable
+        );
+
+        // DTO 변환
+        List<MemberAttendanceDTO> dtoList = result.getContent().stream()
+                .map(attendance -> MemberAttendanceDTO.builder()
                         .employeeId(attendance.getEmployeeId())
                         .eid(attendance.getMember().getEid())
                         .department(attendance.getMember().getDepartment())
@@ -190,15 +156,102 @@ public class MemberAttendanceServiceImpl implements MemberAttendanceService {
                         .checkInTime(attendance.getCheckInTime())
                         .checkOutTime(attendance.getCheckOutTime())
                         .status(attendance.getStatus().name())
-                        .build()
-        ).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
 
+        // PageResponseDTO 반환
         return PageResponseDTO.<MemberAttendanceDTO>withAll()
                 .dtoList(dtoList)
                 .totalCount(result.getTotalElements())
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
+
+
+//    @Override
+//    public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(PageRequestDTO pageRequestDTO, String option, String term, LocalDate startDate, LocalDate endDate) {
+//        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("checkInTime").descending());
+//        Page<MemberAttendance> result;
+//
+//        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
+//        LocalDateTime endDateTime = (endDate != null) ? endDate.plusDays(1).atStartOfDay() : null;
+//
+//        // 필터링 조건
+//        if (startDateTime != null && endDateTime != null) {
+//            // 날짜가 있는 경우
+//            if (option != null && term != null && !term.isEmpty()) {
+//                switch (option) {
+//                    case "name":
+//                        result = memberAttendanceRepository.findByMember_NameContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
+//                        break;
+//                    case "department":
+//                        result = memberAttendanceRepository.findByMember_DepartmentContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
+//                        break;
+//                    case "position":
+//                        result = memberAttendanceRepository.findByMember_PositionContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
+//                        break;
+//                    case "eid": // 이메일 대신 직원 ID로 변경
+//                        result = memberAttendanceRepository.findByMember_EidContainingAndCheckInTimeBetween(term, startDateTime, endDateTime, pageable);
+//                        break;
+//                    case "status":
+//                        result = memberAttendanceRepository.findByStatusAndCheckInTimeBetween(MemberAttendanceStatus.valueOf(term.toUpperCase()), startDateTime, endDateTime, pageable);
+//                        break;
+//                    default:
+//                        result = memberAttendanceRepository.findByCheckInTimeBetween(startDateTime, endDateTime, pageable);
+//                }
+//            } else {
+//                // 검색 조건이 없고, 날짜만 있는 경우
+//                result = memberAttendanceRepository.findByCheckInTimeBetween(startDateTime, endDateTime, pageable);
+//            }
+//        } else {
+//            // 날짜가 없는 경우
+//            if (option != null && term != null && !term.isEmpty()) {
+//                switch (option) {
+//                    case "name":
+//                        result = memberAttendanceRepository.findByMember_NameContaining(term, pageable);
+//                        break;
+//                    case "department":
+//                        result = memberAttendanceRepository.findByMember_DepartmentContaining(term, pageable);
+//                        break;
+//                    case "position":
+//                        result = memberAttendanceRepository.findByMember_PositionContaining(term, pageable);
+//                        break;
+//                    case "eid": // 이메일 대신 직원 ID로 변경
+//                        result = memberAttendanceRepository.findByMember_EidContaining(term, pageable);
+//                        break;
+//                    case "status":
+//                        result = memberAttendanceRepository.findByStatus(MemberAttendanceStatus.valueOf(term.toUpperCase()), pageable);
+//                        break;
+//                    default:
+//                        result = memberAttendanceRepository.findAll(pageable);
+//                }
+//            } else {
+//                // 날짜와 검색 조건이 모두 없는 경우
+//                result = memberAttendanceRepository.findAll(pageable);
+//            }
+//        }
+//
+//        // DTO 변환 및 응답 생성
+//        List<MemberAttendanceDTO> dtoList = result.getContent().stream().map(attendance ->
+//                MemberAttendanceDTO.builder()
+//                        .employeeId(attendance.getEmployeeId())
+//                        .eid(attendance.getMember().getEid())
+//                        .department(attendance.getMember().getDepartment())
+//                        .name(attendance.getMember().getName())
+//                        .checkInTime(attendance.getCheckInTime())
+//                        .checkOutTime(attendance.getCheckOutTime())
+//                        .status(attendance.getStatus().name())
+//                        .build()
+//        ).collect(Collectors.toList());
+//
+//        return PageResponseDTO.<MemberAttendanceDTO>withAll()
+//                .dtoList(dtoList)
+//                .totalCount(result.getTotalElements())
+//                .pageRequestDTO(pageRequestDTO)
+//                .build();
+//    }
+
+
 
 
     @Override

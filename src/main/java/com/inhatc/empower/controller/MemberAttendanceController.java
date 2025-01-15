@@ -20,6 +20,7 @@ public class MemberAttendanceController {
 
     private final MemberAttendanceService memberAttendanceService;
 
+    // 전체 근태 내역 추가(관리자용)
     @GetMapping("/list")
     public PageResponseDTO<MemberAttendanceDTO> getAttendanceList(
             PageRequestDTO pageRequestDTO,
@@ -29,6 +30,7 @@ public class MemberAttendanceController {
             @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         log.info("list..........." + pageRequestDTO);
         return memberAttendanceService.getAttendanceList(pageRequestDTO, option, term, startDate, endDate);
+
     }
 
     // 로그인한 사용자 근태기록(전체)
