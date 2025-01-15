@@ -4,7 +4,6 @@ import com.inhatc.empower.domain.MemberAttendance;
 import com.inhatc.empower.domain.QMember;
 import com.inhatc.empower.domain.QMemberAttendance;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +29,11 @@ public class MemberAttendanceCustomRepositoryImpl implements MemberAttendanceCus
 
         // 조건 빌더 초기화
         BooleanBuilder condition = new BooleanBuilder();
-        condition.and(memberAttendance.checkInTime.between(start, end));
+
+        // 날짜 조건 추가 (날짜가 null이 아닌 경우에만 조건 추가)
+        if (start != null && end != null) {
+            condition.and(memberAttendance.checkInTime.between(start, end));
+        }
 
         // 동적 조건 추가
         if (name != null && !name.isEmpty()) {
@@ -65,6 +68,7 @@ public class MemberAttendanceCustomRepositoryImpl implements MemberAttendanceCus
 
         return new PageImpl<>(results, pageable, total);
     }
+
 
 
 
