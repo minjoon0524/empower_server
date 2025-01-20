@@ -13,9 +13,11 @@ public class MailConfig {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        // gmail 사용        
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
+        // 임시 관리자 메일 설정        
         mailSender.setUsername("minjoon0524@gmail.com");
         mailSender.setPassword("uixcnltqiwppocpk");
 
