@@ -54,10 +54,6 @@ public class Member extends BaseEntity {
         memberRoleList.clear();
     }
 
-    public void changeMemberCheck(boolean memberCheck) {
-        this.memberCheck = memberCheck;
-    }
-
     public void changeHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
     }

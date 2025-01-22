@@ -34,11 +34,11 @@ public class IpAccessInterceptor implements HandlerInterceptor {
         if (!whiteIpRepository.findByAccessIp(clientIp).isPresent()) {
             // 새로운 화이트리스트 IP 테스트 진행
             // 화이트 리스트에 추가된 ip만 허용
-//            WhiteIp newWhiteIp = WhiteIp.builder()
-//                    .accessIp(clientIp)
-//                    .accessDate(LocalDateTime.now())
-//                    .build();
-//            whiteIpRepository.save(newWhiteIp); // DB에 저장
+            WhiteIp newWhiteIp = WhiteIp.builder()
+                    .accessIp(clientIp)
+                    .accessDate(LocalDateTime.now())
+                    .build();
+            whiteIpRepository.save(newWhiteIp); // DB에 저장
 
             log.warn("Forbidden access, URI: {}, IP: {}", request.getRequestURI(), clientIp);
             response.sendError(403, "IP Forbidden");

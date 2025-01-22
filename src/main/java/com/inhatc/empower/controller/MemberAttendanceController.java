@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @RequestMapping("/member/attendance")
 @RequiredArgsConstructor
 @Log4j2
+//출퇴근 컨트롤러
 public class MemberAttendanceController {
 
     private final MemberAttendanceService memberAttendanceService;

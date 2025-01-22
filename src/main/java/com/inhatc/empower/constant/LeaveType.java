@@ -1,10 +1,7 @@
 package com.inhatc.empower.constant;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
-import java.util.Arrays;
-
+// 휴가 enum 타입
 public enum LeaveType {
     GENERAL, //일반
     HALF_DAY, // 반차
@@ -13,7 +10,4 @@ public enum LeaveType {
     CONDOLENCE_PARENT, //조사(부모님)
     CONDOLENCE_SIBLING, // 조사(형제)
     MILITARY_SERVICE; // 예비군
-
-
-
 }

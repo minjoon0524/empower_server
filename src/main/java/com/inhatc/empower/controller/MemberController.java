@@ -27,7 +27,7 @@ public class MemberController {
     private final CustomFileUtil customFileUtil;
 
 
-    // 사용자 조회를 위한 기능
+    // 사용자 조회(필터 및 검색어)
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //임시로 권한 설정
     @GetMapping("/list")
     public PageResponseDTO<MemberSearchDTO> list(
@@ -38,7 +38,7 @@ public class MemberController {
         return memberService.getMemberList(pageRequestDTO, option, term);
     }
 
-
+    // 사용자 수정
     @PutMapping("/modify/{eid}")
     public Map<String, String> modify(
             @PathVariable(name = "eid") String eid,
@@ -59,12 +59,12 @@ public class MemberController {
         log.info("Fetching member with eid: {}", eid);
         return memberService.get(eid);
     }
-
+    // 프로필 이미지 가져오기     
     @GetMapping("/profile/{fileName}")
     public ResponseEntity<Resource> getProfileImage(@PathVariable("fileName") String fileName) {
         return customFileUtil.getFile(fileName);
     }
-
+    // 회원 등록
     @PostMapping("/register")
     public Map<String, String> register(@RequestBody MemberAddDTO memberAddDTO) {
         log.info("MemberDTO: " + memberAddDTO);
@@ -78,7 +78,7 @@ public class MemberController {
         return Map.of("EID", memberRoles);
     }
 
-
+    // 회원 삭제
     @DeleteMapping("/{eid}")
     public Map<String, String> remove(@PathVariable(name="eid") String eid) {
         log.info("Remove: " + eid);
@@ -86,7 +86,7 @@ public class MemberController {
         return Map.of("RESULT", "SUCCESS");
     }
 
-
+    // 로그인 한 사용자 및 권한 확인용
     @GetMapping("/loginOk")
     public ResponseEntity<Map<String, String>> loginOk() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

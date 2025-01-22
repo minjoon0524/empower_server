@@ -11,7 +11,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -171,7 +170,7 @@ public class MemberVacationServiceImpl implements MemberVacationService {
         message.setText(text);
         mailSender.send(message);
     }
-
+    // 특정회원 휴가 조회
     @Override
     public PageResponseDTO<MemberVacationDTO> getOneVacationList(PageRequestDTO pageRequestDTO, String eid) {
         Pageable pageable = PageRequest.of(
@@ -205,6 +204,7 @@ public class MemberVacationServiceImpl implements MemberVacationService {
                 .build();
     }
 
+    // 휴가 상태별 리스트 출력
     @Override
     public PageResponseDTO<MemberVacationDTO> getStatusVacationList(PageRequestDTO pageRequestDTO, String status) {
         Pageable pageable = PageRequest.of(
