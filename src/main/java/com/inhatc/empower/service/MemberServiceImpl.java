@@ -1,9 +1,9 @@
 package com.inhatc.empower.service;
 
-import com.inhatc.empower.controller.MemberController;
-import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.constant.MemberRole;
+import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.dto.*;
+import com.inhatc.empower.repository.MemberCustomRepository;
 import com.inhatc.empower.repository.MemberRepository;
 import com.inhatc.empower.util.CustomFileUtil;
 import jakarta.transaction.Transactional;
@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberCustomRepository memberCustomRepository;
     private final CustomFileUtil customFileUtil; // CustomFileUtil 주입
     private final ModelMapper modelMapper;
 
@@ -178,7 +179,7 @@ public class MemberServiceImpl implements MemberService {
     public void remove(String eid) {
         memberRepository.deleteById(eid);
     }
-    
+
     // 권한 부여
     @Override
     public List<MemberRole> grantUser(String eid) {
@@ -188,5 +189,47 @@ public class MemberServiceImpl implements MemberService {
         member.addRole(MemberRole.ADMIN);
         memberRepository.save(member);
         return member.getMemberRoleList();
+    }
+
+    // QueryDSL 버전
+    @Override
+    public PageResponseDTO<MemberSearchDTO> getMemberLists(PageRequestDTO pageRequestDTO, String searchType, String keyword) {
+        log.info("============ 검색(QueryDSL) =============");
+
+        // Pageable 객체 생성
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("email").descending());
+
+        Page<Member> result = memberCustomRepository.findMember(pageable, searchType, keyword);
+
+        // DTO 변환
+        List<MemberSearchDTO> dtoList = result.getContent().stream().map(member -> {
+            return MemberSearchDTO.builder()
+                    .eid(member.getEid())
+                    .name(member.getName())
+                    .pw(member.getPw())
+                    .department(member.getDepartment())
+                    .email(member.getEmail())
+                    .phone(member.getPhone())
+                    .address(member.getAddress())
+                    .position(member.getPosition())
+                    .hireDate(member.getHireDate())
+                    .memberCheck(member.isMemberCheck())
+                    .roleNames(member.getMemberRoleList()
+                            .stream()
+                            .map(MemberRole::name)
+                            .collect(Collectors.toList()))
+                    .build();
+        }).collect(Collectors.toList());
+
+        // 전체 회원 수
+        long totalCount = result.getTotalElements();
+
+        // PageResponseDTO 반환
+        return PageResponseDTO.<MemberSearchDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(totalCount)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+
     }
 }

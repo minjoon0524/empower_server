@@ -30,13 +30,13 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
                     condition.and(member.name.containsIgnoreCase(keyword)); // 이름 검색
                     break;
                 case "department":
-                    condition.and(member.department.containsIgnoreCase(keyword)); // 이메일 검색
+                    condition.and(member.department.containsIgnoreCase(keyword)); // 부서 검색
                     break;
                 case "position":
-                    condition.and(member.email.containsIgnoreCase(keyword)); // 이메일 검색
+                    condition.and(member.position.containsIgnoreCase(keyword)); // 직급 검색
                     break;
                 case "eid":
-                    condition.and(member.eid.containsIgnoreCase(keyword)); // 전화번호 검색
+                    condition.and(member.eid.containsIgnoreCase(keyword)); // 사번 검색
                     break;
                 case "phone":
                     condition.and(member.phone.containsIgnoreCase(keyword)); // 전화번호 검색

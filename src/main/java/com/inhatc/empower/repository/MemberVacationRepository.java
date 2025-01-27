@@ -20,8 +20,4 @@ public interface MemberVacationRepository extends JpaRepository<MemberVacation,L
     @Query("SELECT mv FROM MemberVacation mv JOIN mv.member m WHERE m.eid = :eid")
     Page<MemberVacation> findByMemberEid(Pageable pageable,@Param("eid") String eid);
 
-
-
-
-
 }

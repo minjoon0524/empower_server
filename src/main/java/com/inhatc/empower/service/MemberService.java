@@ -1,12 +1,10 @@
 package com.inhatc.empower.service;
 
 import com.inhatc.empower.constant.MemberRole;
-import com.inhatc.empower.domain.Member;
 import com.inhatc.empower.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Transactional
@@ -26,39 +24,8 @@ public interface MemberService {
     //    권한
     List<MemberRole> grantUser(String eid);
 
-
-    default MemberDTO entityToDto(Member member) {
-        MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setEid(member.getEid());
-        memberDTO.setName(member.getName());
-        memberDTO.setPw(member.getPw());
-        memberDTO.setDepartment(member.getDepartment());
-        memberDTO.setEmail(member.getEmail());
-        memberDTO.setPhone(member.getPhone());
-        memberDTO.setAddress(member.getAddress());
-        memberDTO.setPosition(member.getPosition());
-        memberDTO.setHireDate(member.getHireDate());
-        memberDTO.setMemberCheck(member.isMemberCheck());
-
-        return memberDTO;
-    }
-
-
-    default Member dtoToEntity(MemberDTO memberDTO) {
-        return Member.builder()
-                .eid(memberDTO.getEid())
-                .name(memberDTO.getName())
-                .pw(memberDTO.getPw())
-                .department(memberDTO.getDepartment())
-                .email(memberDTO.getEmail())
-                .phone(memberDTO.getPhone())
-                .address(memberDTO.getAddress())
-                .position(memberDTO.getPosition())
-                .hireDate(memberDTO.getHireDate())
-                .memberCheck(memberDTO.isMemberCheck())
-                .build();
-    }
-
+    // 조회(QueryDSL)
+    PageResponseDTO<MemberSearchDTO> getMemberLists(PageRequestDTO pageRequestDTO, String searchType,String keyword);
 
 
 }

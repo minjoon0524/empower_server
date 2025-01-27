@@ -28,6 +28,16 @@ public class MemberController {
 
 
     // 사용자 조회(필터 및 검색어)
+//    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //임시로 권한 설정
+//    @GetMapping("/list")
+//    public PageResponseDTO<MemberSearchDTO> list(
+//            PageRequestDTO pageRequestDTO,
+//            @RequestParam(name = "option") String option,
+//            @RequestParam(name = "term") String term) {
+//        log.info("list..........." + pageRequestDTO);
+//        return memberService.getMemberList(pageRequestDTO, option, term);
+//    }
+
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") //임시로 권한 설정
     @GetMapping("/list")
     public PageResponseDTO<MemberSearchDTO> list(
@@ -35,7 +45,7 @@ public class MemberController {
             @RequestParam(name = "option") String option,
             @RequestParam(name = "term") String term) {
         log.info("list..........." + pageRequestDTO);
-        return memberService.getMemberList(pageRequestDTO, option, term);
+        return memberService.getMemberLists(pageRequestDTO, option, term);
     }
 
     // 사용자 수정
